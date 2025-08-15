@@ -1,13 +1,11 @@
-import { Box, Container } from '@mui/material';
-import LoginForm from './components/loginForm';
+'use client';
 
+import Login from "@/views/login/Login";
 
-export default function LoginPage() {
-  return (
-    <Box sx={{ bgcolor: 'grey.100', minHeight: '100vh', py: 4 }}>
-      <Container maxWidth="sm">
-        <LoginForm />
-      </Container>
-    </Box>
-  );
-}
+  const LoginPage: React.FC = () => {
+    return (
+      <Login/>
+    );
+  };
+
+  export default LoginPage;
