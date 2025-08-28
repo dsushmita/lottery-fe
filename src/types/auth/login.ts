@@ -27,3 +27,5 @@ export interface AuthResponse {
 export interface LoginFormData extends AuthCredentials {
   rememberMe: boolean;
 }
+
+

@@ -1,58 +1,47 @@
-import { SignupApiCredentials, SignupResponse } from '@/types/auth/signup';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-
-export const SignupService = async (credentials: SignupApiCredentials): Promise<SignupResponse> => {
-  console.log('Signup API service - sending credentials:', { 
-    username: credentials.username,
-    email: credentials.email,
-    password: '***' 
-  });
-  
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/auth/register`, {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(credentials), 
-    });
-
-    console.log('Signup API response status:', response.status);
-
-    // Handle different error status codes
-    if (!response.ok) {
-      let errorMessage = 'Signup failed';
-      
-      try {
-        const errorData = await response.json();
-        errorMessage = errorData.message || errorData.error || `HTTP ${response.status}: ${response.statusText}`;
-      } catch {
-        // If JSON parsing fails, use status text
-        errorMessage = `HTTP ${response.status}: ${response.statusText}`;
-      }
-      
-      console.log('Signup API error response:', errorMessage);
-      throw new Error(errorMessage);
-    }
-
-    const result: SignupResponse = await response.json();
-    console.log('Signup API success response - user:', result.user?.username || 'No user data');
+import { SignupResponse, SignupCredentials, SignupRequest, SignupUser, SignupValidation } from '@/types/auth/signup';
+import { httpClient } from './httpClient';
+export const SignupService = {
+  async signup(credentials: SignupCredentials): Promise<SignupResponse> {
+    const result = await httpClient.post<SignupResponse>('/api/auth/register', credentials);
     
-    // Validate the response structure
-    if (!result.token || !result.user) {
-      throw new Error('Invalid response from server');
+    if (result.token) {
+      httpClient.setAuthToken(result.token);
     }
     
     return result;
+  },
+
+  async signupWithDetails(request: SignupRequest): Promise<SignupResponse> {
+    const result = await httpClient.post<SignupResponse>('/api/auth/register', request);
     
-  } catch (error) {
-    // Handle network errors
-    if (error instanceof TypeError && error.message.includes('fetch')) {
-      throw new Error('Network error. Please check your connection.');
+    if (result.token) {
+      httpClient.setAuthToken(result.token);
     }
     
-    // Re-throw other errors (including our custom ones)
-    throw error;
+    return result;
+  },
+
+  async verifyEmail(token: string): Promise<{ message: string; user: SignupUser }> {
+    return httpClient.post<{ message: string; user: SignupUser }>('/api/auth/verify-email', { token });
+  },
+
+  async resendVerification(email: string): Promise<{ message: string }> {
+    return httpClient.post<{ message: string }>('/api/auth/resend-verification', { email });
+  },
+
+  async getSignupValidation(): Promise<SignupValidation> {
+    return httpClient.get<SignupValidation>('/api/auth/signup-requirements');
+  },
+
+  async checkUsernameAvailability(username: string): Promise<{ available: boolean }> {
+    return httpClient.get<{ available: boolean }>('/api/auth/check-username', { 
+      params: { username } 
+    });
+  },
+
+  async checkEmailAvailability(email: string): Promise<{ available: boolean }> {
+    return httpClient.get<{ available: boolean }>('/api/auth/check-email', { 
+      params: { email } 
+    });
   }
 };
