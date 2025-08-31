@@ -1,11 +1,10 @@
 'use client';
+import Login from '@/views/login/Login';
+const LoginPage = () => {
+  return (
+    <Login />
+  );
+};
 
-import Login from "@/views/login/Login";
+export default LoginPage;
 
-  const LoginPage: React.FC = () => {
-    return (
-      <Login/>
-    );
-  };
-
-  export default LoginPage;

@@ -1,56 +1,82 @@
-"use client";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { AuthError, LoginFormData } from '@/types/auth/login';
+import { authService } from '@/services/authService';
 
-import { useState, useContext } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { AuthResponse, User } from '@/types/auth/login';
-import { AuthContext } from '@/context/AuthContext';
-import { LoginService } from '@/services/loginService';
-
-interface UseLoginReturn {
-  user: User | null;
-  loading: boolean;
-  error: string | null;
-  handleLogin: (credentials: { username: string; password: string }) => Promise<void>;
-}
-
-export const useLogin = (): UseLoginReturn => {
-  const { user, setUser } = useContext(AuthContext) as { 
-    user: User | null; 
-    setUser: React.Dispatch<React.SetStateAction<User | null>> 
-  };
+export const useLogin = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<AuthError | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const handleLogin = async (credentials: { username: string; password: string }) => {
+  const login = async (formData: LoginFormData) => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      console.log('Starting login process...');
-      const data = await LoginService(credentials);
+      const response = await authService.login(formData);
       
-      // Set user data and token
-      setUser(data.user);
-      localStorage.setItem('token', data.token);
-      
-      // Optional: Store user data in localStorage as well for persistence
-      localStorage.setItem('user', JSON.stringify(data.user));
-      
-      console.log('Login successful, redirecting...');
-      
-      // Get redirect URL from search params or default to dashboard
-      const redirectTo = searchParams.get('redirect') || '/dashboard';
-      router.push(redirectTo);
-      
+      if (response.success) {
+        router.push('/dashboard');
+      } else {
+        setError({ message: response.message || 'Login failed' });
+      }
     } catch (err) {
-      console.error('Login error:', err);
-      setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
+      setError({ 
+        message: err instanceof Error ? err.message : 'An unexpected error occurred' 
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  return { user, loading, error, handleLogin };
+  const loginWithProvider = async (provider: 'google' | 'twitter' | 'discord') => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      let response;
+      switch (provider) {
+        case 'google':
+          response = await authService.loginWithGoogle();
+          break;
+        case 'twitter':
+          response = await authService.loginWithTwitter();
+          break;
+        case 'discord':
+          response = await authService.loginWithDiscord();
+          break;
+        default:
+          throw new Error('Unsupported provider');
+      }
+
+      if (response.success) {
+        router.push('/dashboard');
+      }
+    } catch (err) {
+      setError({ 
+        message: err instanceof Error ? err.message : 'Social login failed' 
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(prev => !prev);
+  };
+
+  const clearError = () => {
+    setError(null);
+  };
+
+  return {
+    login,
+    loginWithProvider,
+    togglePasswordVisibility,
+    clearError,
+    loading,
+    error,
+    showPassword,
+  };
 };

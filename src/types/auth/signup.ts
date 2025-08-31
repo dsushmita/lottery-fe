@@ -1,5 +1,5 @@
 export interface SignupCredentials {
-  username: string;
+  userName: string;
   email: string;
   password: string;
   confirmPassword: string;
@@ -12,7 +12,7 @@ export interface SignupFormData extends SignupCredentials {
 export interface SignupResponse {
   user: {
     id: string | number;
-    username: string;
+    userName: string;
     email: string;
     name?: string;
     createdAt: string;
@@ -22,7 +22,7 @@ export interface SignupResponse {
 }
 
 export interface SignupApiCredentials {
-  username: string;
+  userName: string;
   email: string;
   password: string;
 }

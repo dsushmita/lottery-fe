@@ -7,8 +7,8 @@ import { useForm, Controller } from 'react-hook-form';
 import Image from 'next/image';
 import { SignupFormData } from '@/types/auth/signup';
 
-import geometricBackground from "../../../src/image/bgimage.png";
-import logoImage from "../../../src/image/companylogo.png";
+import geometricBackground from "../../../public/image/bgimage.png";
+import logoImage from "../../../public/image/companylogo.png";
 import { useSignup } from '@/hooks/signup/UseSignup';
 
 const SignupForm = () => {
@@ -48,7 +48,7 @@ const SignupForm = () => {
 
     // Extract credentials without confirmPassword and acceptTerms
     const credentials = {
-      username: data.username,
+      username: data.userName,
       email: data.email,
       password: data.password
     };
@@ -69,7 +69,7 @@ const SignupForm = () => {
       sx={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         height: '100vh',
         width: '100vw',
         backgroundImage: `url(${geometricBackground.src})`,

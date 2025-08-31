@@ -1,19 +1,24 @@
-import Header from '@/components/Header'
 import React from 'react'
-import { Box, Container } from '@mui/material'
 import LoginForm from './LoginForm'
+import { useRouter } from 'next/navigation';
 
 function Login() {
+  const router = useRouter();
+  const handleCreateAccount = () => {
+    router.push('/signUp');
+  };
+
+  const handleForgotPassword = () => {
+    router.push('/forgot-password');
+  };
   return (
-    <div>
-      <Box sx={{ bgcolor: 'grey.50', minHeight: '100vh' }}>
-        <Header />
-        <Container maxWidth="lg" sx={{ py: { xs: 2, sm: 4 }, px: { xs: 2, sm: 0 } }}>
-          <LoginForm/>
-        </Container>
-      </Box>
-    </div>
+    <LoginForm
+      onCreateAccount={handleCreateAccount}
+      onForgotPassword={handleForgotPassword}
+    />
   )
 }
 
 export default Login
+
+

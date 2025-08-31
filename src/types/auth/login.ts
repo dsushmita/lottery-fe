@@ -1,29 +1,21 @@
-// types/auth/login.ts
-
-export interface User {
-  id: string | number;
-  username: string;
+export interface LoginFormData {
   email: string;
-  name?: string;
-  role?: string;
-  avatar?: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
-export interface AuthCredentials {
-  username: string; // This is typically email
   password: string;
+  rememberMe: boolean;
 }
 
-export interface AuthResponse {
-  user: User;
-  token: string;
-  refreshToken?: string;
-  expiresIn?: number;
+export interface LoginResponse {
+  success: boolean;
+  token?: string;
+  user?: {
+    id: string;
+    email: string;
+    name: string;
+  };
   message?: string;
 }
 
-export interface LoginFormData extends AuthCredentials {
-  rememberMe: boolean;
+export interface AuthError {
+  message: string;
+  field?: keyof LoginFormData;
 }
