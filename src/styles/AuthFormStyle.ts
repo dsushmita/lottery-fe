@@ -3,7 +3,7 @@ import { Box, Paper, Button, TextField } from '@mui/material';
 import leftSideImage from "../../public/image/leftsideImage.png";
 import geometricBackground from "../../public/image/bgimage.png";
 
-export const LoginContainer = styled(Box)(({ theme }) => ({
+export const AuthContainer = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
   display: 'flex',
   alignItems: 'center',
@@ -13,7 +13,7 @@ export const LoginContainer = styled(Box)(({ theme }) => ({
   backgroundPosition: 'center',
 }));
 
-export const LoginPaper = styled(Paper)(({ theme }) => ({
+export const FormContainer = styled(Paper)(({ theme }) => ({
   display: 'flex',
   width: '100%',
   maxWidth: 900,

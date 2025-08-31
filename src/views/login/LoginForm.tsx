@@ -22,14 +22,14 @@ import { SiDiscord } from 'react-icons/si';
 import { useForm, Controller } from 'react-hook-form';
 
 import {
-  LoginContainer,
-  LoginPaper,
+  AuthContainer,
+  FormContainer,
   LeftPanel,
   RightPanel,
   LogoContainer,
   StyledTextField,
   SocialButton
-} from '@/styles/LoginFormStyle';
+} from '@/styles/AuthFormStyle';
 import { LoginFormData } from '@/types/auth/login';
 import { useLogin } from '@/hooks/login/useLogin';
 import logoImage from "../../../public/image/companylogo.png";
@@ -97,8 +97,8 @@ const LoginForm = ({
   };
 
   return (
-    <LoginContainer>
-      <LoginPaper elevation={0}>
+    <AuthContainer>
+      <FormContainer elevation={0}>
         {/* Left Panel */}
         <LeftPanel>
           {/* Top - COP THEM text */}
@@ -330,8 +330,8 @@ const LoginForm = ({
             </SocialButton>
           </Box>
         </RightPanel>
-      </LoginPaper>
-    </LoginContainer>
+      </FormContainer>
+    </AuthContainer>
   );
 };
 
