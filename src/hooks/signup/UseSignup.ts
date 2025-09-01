@@ -6,7 +6,7 @@ import { useState, useContext } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { SignupResponse } from '@/types/auth/signup';
 import { AuthContext } from '@/context/AuthContext';
-import { User } from '@/types/auth/login';
+import { User } from '@/types/auth/auth';
 import { SignupService } from '@/services/signUpService';
 
 interface UseSignupReturn {

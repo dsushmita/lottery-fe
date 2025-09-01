@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AuthError, LoginFormData } from '@/types/auth/login';
 import { authService } from '@/services/authService';
+import { AuthError, LoginFormData } from '@/types/auth/auth';
+import { useAuth } from '@/context/AuthContext';
 
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<AuthError | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const { setUser } = useAuth();
 
   const login = async (formData: LoginFormData) => {
     setLoading(true);
@@ -15,9 +17,11 @@ export const useLogin = () => {
 
     try {
       const response = await authService.login(formData);
+      console.log("response", response)
       
-      if (response.success) {
+      if (response.success && response.user) {
         router.push('/dashboard');
+        //  setUser(response.user);
       } else {
         setError({ message: response.message || 'Login failed' });
       }

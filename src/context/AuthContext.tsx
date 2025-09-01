@@ -1,17 +1,16 @@
-// context/AuthContext.tsx
-"use client";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
-import { User } from '@/types/auth/login';
 
 interface AuthContextType {
   user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
-  logout: () => void;
+  isLoading: boolean;
   isAuthenticated: boolean;
+  setUser: (user: User | null) => void;
+  refreshUser: () => Promise<void>;
+  logout: () => Promise<void>;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -19,43 +18,68 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Load user from localStorage on mount
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
-    
-    if (token && storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        setUser(parsedUser);
-      } catch (error) {
-        console.error('Error parsing stored user data:', error);
-        // Clear invalid data
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-      }
-    }
+    initializeAuth();
   }, []);
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    
-    // Optionally redirect to login page
-    if (typeof window !== 'undefined') {
-      window.location.href = '/login';
+  const initializeAuth = async () => {
+    try {
+      setIsLoading(true);
+      
+      const storedUser = authService.getStoredUser();
+      if (storedUser && authService.isAuthenticated()) {
+        setUser(storedUser);
+        
+        // Verify with server in background
+        try {
+          const currentUser = await authService.getCurrentUser();
+          if (currentUser) {
+            setUser(currentUser);
+          } else {
+            setUser(null);
+          }
+        } catch (error) {
+          console.warn('Failed to verify user session:', error);
+          // Keep stored user for offline experience
+        }
+      }
+    } catch (error) {
+      console.error('Auth initialization failed:', error);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const isAuthenticated = !!user;
+  const refreshUser = async () => {
+    try {
+      const currentUser = await authService.getCurrentUser();
+      setUser(currentUser);
+    } catch (error) {
+      console.error('Failed to refresh user:', error);
+      setUser(null);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await authService.logout();
+      setUser(null);
+    } catch (error) {
+      console.error('Logout failed:', error);
+      setUser(null);
+    }
+  };
 
   const value: AuthContextType = {
     user,
+    isLoading,
+    isAuthenticated: !!user,
     setUser,
+    refreshUser,
     logout,
-    isAuthenticated,
   };
 
   return (
@@ -63,4 +87,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };

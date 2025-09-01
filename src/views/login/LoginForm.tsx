@@ -30,7 +30,7 @@ import {
   StyledTextField,
   SocialButton
 } from '@/styles/AuthFormStyle';
-import { LoginFormData } from '@/types/auth/login';
+import { LoginFormData } from '@/types/auth/auth';
 import { useLogin } from '@/hooks/login/useLogin';
 import logoImage from "../../../public/image/companylogo.png";
 import Image from 'next/image';

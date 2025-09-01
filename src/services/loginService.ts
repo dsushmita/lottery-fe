@@ -1,4 +1,4 @@
-import { AuthCredentials, AuthResponse } from '@/types/auth/login';
+import { AuthCredentials, AuthResponse } from '@/types/auth/auth';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
 
