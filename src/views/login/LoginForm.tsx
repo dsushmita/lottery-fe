@@ -1,338 +1,205 @@
-// components/LoginForm/LoginForm.tsx
-import { useState } from 'react';
+'use client';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import {
-  Button,
   Typography,
   Checkbox,
   FormControlLabel,
-  Divider,
-  Alert,
-  CircularProgress,
-  Box,
-  Link,
   IconButton,
+  InputAdornment,
+  Alert,
+  Divider,
+  Box,
 } from '@mui/material';
-import {
-  Google as GoogleIcon,
-  Twitter as TwitterIcon,
-  Visibility,
-  VisibilityOff,
-} from '@mui/icons-material';
-import { SiDiscord } from 'react-icons/si';
-import { useForm, Controller } from 'react-hook-form';
-
-import {
-  AuthContainer,
-  FormContainer,
-  LeftPanel,
-  RightPanel,
-  LogoContainer,
-  StyledTextField,
-  SocialButton
-} from '@/styles/AuthFormStyle';
+import { Visibility, VisibilityOff, Google, GitHub, Twitter } from '@mui/icons-material';
+import Link from 'next/link';
+import AuthLayout from '@/components/AuthLayout';
+import { StyledTextField, SocialButton, PrimaryButton } from '@/styles/authStyles';
+import { useLogin } from '@/hooks/useLogin';
 import { LoginFormData } from '@/types/auth/auth';
-import { useLogin } from '@/hooks/login/useLogin';
-import logoImage from "../../../public/image/companylogo.png";
-import Image from 'next/image';
 
-
-interface LoginFormProps {
-  onCreateAccount?: () => void;
-  onForgotPassword?: () => void;
-}
-
-const LoginForm = ({
-  onCreateAccount,
-  onForgotPassword,
-}: LoginFormProps) => {
-  const {
-    login,
-    loginWithProvider,
+export default function LoginPage() {
+  const { 
+    login, 
+    loginWithProvider, 
+    loading, 
+    error, 
+    showPassword, 
     togglePasswordVisibility,
-    clearError,
-    loading,
-    error,
-    showPassword
+    clearError 
   } = useLogin();
 
   const {
-    control,
+    register,
     handleSubmit,
     formState: { errors },
+    setValue,
     watch,
   } = useForm<LoginFormData>({
     defaultValues: {
-      email: '',
-      password: '',
       rememberMe: false,
     },
-    mode: 'onChange',
   });
 
-  const watchedFields = watch();
-  const isFormValid = watchedFields.email &&
-    watchedFields.password &&
-    !errors.email &&
-    !errors.password;
+  const rememberMe = watch('rememberMe');
 
-  const onSubmit = async (data: LoginFormData) => {
-    await login(data);
+  const onSubmit = (data: LoginFormData) => {
+    clearError();
+    login(data);
   };
 
-  const handleFormChange = () => {
-    if (error) clearError();
-  };
-
-  // Pure React Hook Form validation functions
-  const validateEmail = (value: string) => {
-    if (!value) return 'Email is required';
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(value) || 'Enter a valid email address';
-  };
-
-  const validatePassword = (value: string) => {
-    if (!value) return 'Password is required';
-    if (value.length < 6) return 'Password must be at least 6 characters';
-    return true;
+  const handleSocialLogin = (provider: 'google' | 'twitter' | 'discord') => {
+    clearError();
+    loginWithProvider(provider);
   };
 
   return (
-    <AuthContainer>
-      <FormContainer elevation={0}>
-        {/* Left Panel */}
-        <LeftPanel>
-          {/* Top - COP THEM text */}
-          <Box sx={{ position: 'relative', zIndex: 1, textAlign: 'center' }}>
-            <Typography
-              variant="h3"
-              component="h1"
-              fontWeight="bold"
-              color="white"
-              sx={{ letterSpacing: 2 }}
-            >
-              COP THEM
-            </Typography>
-          </Box>
+    <AuthLayout>
+      <Typography variant="h4" sx={{ mb: 1, fontWeight: 600, color: 'text.primary' }}>
+        Login to your account
+      </Typography>
 
-          {/* Bottom - Logo Image */}
-          <LogoContainer>
-            <Image src={logoImage} alt="Logo" />
-          </LogoContainer>
-        </LeftPanel>
-        {/* Right Panel */}
-        <RightPanel>
-          <Typography
-            variant="h4"
-            component="h2"
-            color="white"
-            fontWeight="600"
-            sx={{ mb: 1 }}
-          >
-            Login to your account
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 4 }}
-          >
-            Don't have an account yet?{' '}
-            <Link
-              component="button"
-              type="button"
-              onClick={onCreateAccount}
-              sx={{
-                color: '#6366f1',
-                textDecoration: 'none',
-                fontWeight: 500,
-                '&:hover': { textDecoration: 'underline' }
-              }}
-            >
-              Create Account
-            </Link>
-          </Typography>
+      <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          Don't have an account yet?
+        </Typography>
+        <Typography
+          component={Link}
+          href="/signup"
+          variant="body2"
+          sx={{
+            color: 'primary.main',
+            textDecoration: 'none',
+            fontWeight: 500,
+            '&:hover': { textDecoration: 'underline' },
+          }}
+        >
+          Create Account
+        </Typography>
+      </Box>
 
-          {error && (
-            <Alert
-              severity="error"
-              sx={{
-                mb: 3,
-                backgroundColor: 'rgba(244, 67, 54, 0.1)',
-                color: '#f44336',
-                border: '1px solid rgba(244, 67, 54, 0.3)',
-                '& .MuiAlert-icon': { color: '#f44336' }
-              }}
-            >
-              {error.message}
-            </Alert>
-          )}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }} onClose={clearError}>
+          {error.message}
+        </Alert>
+      )}
 
-          <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mb: 4 }}>
-            <Controller
-              name="email"
-              control={control}
-              rules={{ validate: validateEmail }}
-              render={({ field }) => (
-                <StyledTextField
-                  {...field}
-                  fullWidth
-                  label="Username or Email"
-                  type="email"
-                  autoComplete="email"
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <StyledTextField
+          {...register('email', {
+            required: 'Email is required',
+            pattern: {
+              value: /^\S+@\S+$/i,
+              message: 'Please enter a valid email',
+            },
+          })}
+          fullWidth
+          label="Username or Email"
+          variant="outlined"
+          error={!!errors.email}
+          helperText={errors.email?.message}
+          disabled={loading}
+        />
+
+        <StyledTextField
+          {...register('password', {
+            required: 'Password is required',
+            minLength: {
+              value: 6,
+              message: 'Password must be at least 6 characters',
+            },
+          })}
+          fullWidth
+          label="Password"
+          type={showPassword ? 'text' : 'password'}
+          variant="outlined"
+          error={!!errors.password}
+          helperText={errors.password?.message}
+          disabled={loading}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={togglePasswordVisibility}
+                  edge="end"
+                  sx={{ color: 'text.secondary' }}
                   disabled={loading}
-                  error={!!errors.email}
-                  helperText={errors.email?.message}
-                  onChange={(e) => {
-                    field.onChange(e);
-                    handleFormChange();
-                  }}
-                />
-              )}
-            />
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
 
-            <Controller
-              name="password"
-              control={control}
-              rules={{ validate: validatePassword }}
-              render={({ field }) => (
-                <StyledTextField
-                  {...field}
-                  fullWidth
-                  label="Password"
-                  type={showPassword ? 'text' : 'password'}
-                  autoComplete="current-password"
-                  disabled={loading}
-                  error={!!errors.password}
-                  helperText={errors.password?.message}
-                  onChange={(e) => {
-                    field.onChange(e);
-                    handleFormChange();
-                  }}
-                  InputProps={{
-                    endAdornment: (
-                      <IconButton
-                        onClick={togglePasswordVisibility}
-                        edge="end"
-                        sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
-                        disabled={loading}
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    ),
-                  }}
-                />
-              )}
-            />
-
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                mb: 3,
-              }}
-            >
-              <Controller
-                name="rememberMe"
-                control={control}
-                render={({ field }) => (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        {...field}
-                        checked={field.value}
-                        disabled={loading}
-                        sx={{
-                          color: 'rgba(255, 255, 255, 0.7)',
-                          '&.Mui-checked': { color: '#6366f1' },
-                        }}
-                      />
-                    }
-                    label={
-                      <Typography sx={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.9rem' }}>
-                        Remember me
-                      </Typography>
-                    }
-                  />
-                )}
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                {...register('rememberMe')}
+                checked={rememberMe}
+                onChange={(e) => setValue('rememberMe', e.target.checked)}
+                disabled={loading}
+                sx={{ color: 'text.secondary', '&.Mui-checked': { color: 'primary.main' } }}
               />
-              <Link
-                component="button"
-                type="button"
-                onClick={onForgotPassword}
-                sx={{
-                  color: 'rgba(255, 255, 255, 0.7)',
-                  textDecoration: 'none',
-                  fontSize: '0.9rem',
-                  '&:hover': {
-                    color: '#6366f1',
-                    textDecoration: 'underline'
-                  }
-                }}
-              >
-                Forgot Password?
-              </Link>
-            </Box>
+            }
+            label={
+              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                Remember me
+              </Typography>
+            }
+          />
 
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              size="large"
-              disabled={loading || !isFormValid}
-              sx={{
-                py: 2,
-                borderRadius: 2,
-                textTransform: 'none',
-                fontSize: '1rem',
-                fontWeight: 600,
-                background: 'linear-gradient(to right, #3749FF, #5B64FF)',
-                color:"white",
-                // background: 'linear-gradient(45deg, #6366f1 30%, #8b5cf6 90%)',
-                '&:hover': {
-                  background: 'linear-gradient(45deg, #5b21b6 30%, #7c3aed 90%)',
-                    color:"white",
-                },
-                // '&:disabled': {
-                //   background: 'rgba(255, 255, 255, 0.1)',
-                //   color: 'rgba(255, 255, 255, 0.5)',
-                // },
-              }}
-            >
-              {loading ? <CircularProgress size={24} color="inherit" /> : 'Log In'}
-            </Button>
-          </Box>
+          <Typography
+            component={Link}
+            href="/forgot-password"
+            variant="body2"
+            sx={{
+              color: 'text.secondary',
+              textDecoration: 'none',
+              '&:hover': { color: 'primary.main' },
+            }}
+          >
+            Forgot Password?
+          </Typography>
+        </Box>
 
-          <Divider sx={{ mb: 3, borderColor: 'rgba(255, 255, 255, 0.2)' }}>
-            <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)', px: 2 }}>
-              Or
-            </Typography>
-          </Divider>
+        <PrimaryButton
+          type="submit"
+          fullWidth
+          disabled={loading}
+          sx={{ mb: 3 }}
+        >
+          {loading ? 'Logging in...' : 'Log in'}
+        </PrimaryButton>
+      </form>
 
-          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
-            <SocialButton
-              onClick={() => loginWithProvider('google')}
-              disabled={loading}
-            >
-              <GoogleIcon />
-            </SocialButton>
+      <Divider sx={{ mb: 3, bgcolor: 'divider' }}>
+        <Typography variant="body2" sx={{ color: 'text.secondary', px: 2 }}>
+          Or
+        </Typography>
+      </Divider>
 
-            <SocialButton
-              onClick={() => loginWithProvider('twitter')}
-              disabled={loading}
-            >
-              <TwitterIcon />
-            </SocialButton>
-
-            <SocialButton
-              onClick={() => loginWithProvider('discord')}
-              disabled={loading}
-            >
-              <SiDiscord size={24} />
-            </SocialButton>
-          </Box>
-        </RightPanel>
-      </FormContainer>
-    </AuthContainer>
+      <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
+        <SocialButton 
+          onClick={() => handleSocialLogin('google')} 
+          disabled={loading}
+        >
+          <Google />
+        </SocialButton>
+        <SocialButton 
+          onClick={() => handleSocialLogin('twitter')} 
+          disabled={loading}
+        >
+          <Twitter />
+        </SocialButton>
+        <SocialButton 
+          onClick={() => handleSocialLogin('discord')} 
+          disabled={loading}
+        >
+          <GitHub />
+        </SocialButton>
+      </Box>
+    </AuthLayout>
   );
-};
-
-export default LoginForm;
+}

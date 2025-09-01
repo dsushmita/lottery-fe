@@ -1,7 +1,13 @@
 import { AuthProvider } from '@/context/AuthContext';
-import ThemeRegistry from '@/ThemeRegistry';
+import { CustomThemeProvider } from '@/context/ThemeContext';
 import { CssBaseline } from '@mui/material';
 import './globals.css';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'COP THEM - Lottery Application',
+  description: 'Scalable Next.js frontend for lottery application with Material UI and TypeScript',
+};
 
 export default function RootLayout({
   children,
@@ -11,12 +17,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ThemeRegistry options={{ key: 'mui' }}>
+        <CustomThemeProvider>
           <CssBaseline />
           <AuthProvider>
             {children}
           </AuthProvider>
-        </ThemeRegistry>
+        </CustomThemeProvider>
       </body>
     </html>
   );

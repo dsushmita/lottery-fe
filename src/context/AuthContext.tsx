@@ -1,5 +1,8 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-
+// context/AuthContext.tsx
+'use client';
+import { createContext, useContext, useState, useEffect, ReactNode, useMemo } from 'react';
+import { User } from '@/types/auth/auth';
+import { authService } from '@/services/authService';
 
 interface AuthContextType {
   user: User | null;
@@ -16,7 +19,7 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -27,12 +30,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const initializeAuth = async () => {
     try {
       setIsLoading(true);
-      
+
       const storedUser = authService.getStoredUser();
       if (storedUser && authService.isAuthenticated()) {
         setUser(storedUser);
-        
-        // Verify with server in background
+
         try {
           const currentUser = await authService.getCurrentUser();
           if (currentUser) {
@@ -42,7 +44,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
         } catch (error) {
           console.warn('Failed to verify user session:', error);
-          // Keep stored user for offline experience
         }
       }
     } catch (error) {
@@ -73,21 +74,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const value: AuthContextType = {
+  const value: AuthContextType = useMemo(() => ({
     user,
     isLoading,
     isAuthenticated: !!user,
     setUser,
     refreshUser,
     logout,
-  };
-
+  }), [user, isLoading]);
   return (
     <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
 export const useAuth = () => {
   const context = useContext(AuthContext);

@@ -1,12 +1,12 @@
 'use client';
-import React from 'react';
 import { Typography, Button, Alert, Box } from '@mui/material';
 import Link from 'next/link';
 import { useForgotPassword } from '@/hooks/login/useForgotPassword';
 import AuthLayout from '@/components/AuthLayout';
-import { StyledTextField } from '@/styles/AuthFormStyle';
+import { StyledTextField } from '@/styles/authStyles';
 
-const ForgotPasswordPage: React.FC = () => {
+export default function ForgotPasswordPage() {
+  console.log("page pass here")
   const {
     register,
     handleSubmit,

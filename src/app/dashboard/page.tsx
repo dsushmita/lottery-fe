@@ -1,18 +1,21 @@
-import { Typography, Box } from "@mui/material";
+'use client';
+import React from 'react';
+import { useAuth } from '@/context/AuthContext';
+import MainLayout from '@/components/layouts/PageLayout';
+import { Typography } from '@mui/material'; 
 
-const Dashboard = () => {
+export default function DashboardPage() {
+  const { user } = useAuth();
+
   return (
-    <Box 
-      display="flex" 
-      justifyContent="center" 
-      alignItems="center" 
-      height="100vh"
-    >
-      <Typography variant="h1" component="h2">
-        This is dashboard page
+    <MainLayout title="Dashboard">
+      <Typography variant="h4" gutterBottom sx={{ color: 'text.primary' }}>
+        Dashboard
       </Typography>
-    </Box>
-  );
-};
 
-export default Dashboard;
+      <Typography variant="body1" sx={{ mb: 4, color: 'text.secondary' }}>
+        Welcome back, {user?.name}!
+      </Typography>
+    </MainLayout>
+  );
+}

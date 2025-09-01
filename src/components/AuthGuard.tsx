@@ -6,44 +6,52 @@ import { CircularProgress, Box } from '@mui/material';
 
 interface AuthGuardProps {
   children: React.ReactNode;
-  requireAuth?: boolean;
-  redirectTo?: string;
 }
 
-const AuthGuard: React.FC<AuthGuardProps> = ({ 
-  children, 
-  requireAuth = true,
-  redirectTo = '/login'
-}) => {
+const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
-  const publicRoutes = ['/login', '/signup', '/forgot-password', '/reset-password'];
+  const publicRoutes = ['/login', '/signup', '/forgetPassword', '/reset-password'];
   const isPublicRoute = publicRoutes.includes(pathname);
 
   useEffect(() => {
     if (!isLoading) {
-      if (requireAuth && !isAuthenticated && !isPublicRoute) {
-        router.push(redirectTo);
-      } else if (isAuthenticated && isPublicRoute) {
-        router.push('/dashboard');
+      if (!isAuthenticated && !isPublicRoute) {
+        router.replace('/login');
+      }  else if (isAuthenticated && isPublicRoute) {
+        router.replace('/dashboard');
       }
     }
-  }, [isAuthenticated, isLoading, requireAuth, isPublicRoute, router, redirectTo]);
+  }, [isAuthenticated, isLoading, isPublicRoute, pathname, router]);
 
   if (isLoading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '100vh',
+        bgcolor: 'background.default' 
+      }}>
         <CircularProgress />
       </Box>
     );
   }
 
-  if (requireAuth && !isAuthenticated && !isPublicRoute) return null;
-  if (isAuthenticated && isPublicRoute) return null;
+  // Show auth pages if not authenticated and on public route
+  if (!isAuthenticated && isPublicRoute) {
+    return <>{children}</>;
+  }
 
-  return <>{children}</>;
+  // Show protected content if authenticated and not on auth pages
+  if (isAuthenticated && !isPublicRoute) {
+    return <>{children}</>;
+  }
+
+  // Don't render anything while redirecting
+  return null;
 };
 
 export default AuthGuard;
