@@ -5,7 +5,7 @@ import { useForgotPassword } from '@/hooks/login/useForgotPassword';
 import AuthLayout from '@/components/AuthLayout';
 import { StyledTextField } from '@/styles/authStyles';
 
-export default function ForgotPasswordPage() {
+export default function ForgotPasswordForm() {
   console.log("page pass here")
   const {
     register,

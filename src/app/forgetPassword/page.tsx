@@ -1,11 +1,12 @@
-import ForgotPasswordPage from "@/views/forgetPassword/forgetPassword";
+'use client';
+import ForgotPasswordForm from "@/views/forgetPassword/ForgetPasswordForm";
 
-const ForgotPassword= () => {
+const ForgotPasswordPage= () => {
   console.log("page pass here")
 
   return (
-    <ForgotPasswordPage />
+    <ForgotPasswordForm />
   );
 };
 
-export default ForgotPassword;
+export default ForgotPasswordPage;

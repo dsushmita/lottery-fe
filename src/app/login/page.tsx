@@ -1,8 +1,8 @@
 'use client';
-import Login from '@/views/login/Login';
+import LoginForm from '@/views/login/LoginForm';
 const LoginPage = () => {
   return (
-    <Login />
+    <LoginForm />
   );
 };
 

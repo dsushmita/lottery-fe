@@ -104,7 +104,7 @@ class AuthService {
 
   // Forgot password
   async forgotPassword(data: ForgotPasswordData): Promise<void> {
-    await httpClient.post("/auth/forgot-password", data);
+    await httpClient.post("/auth/forgetPassword", data);
   }
 
   // Reset password

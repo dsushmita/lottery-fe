@@ -1,5 +1,4 @@
 'use client';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Typography,
@@ -15,10 +14,10 @@ import { Visibility, VisibilityOff, Google, GitHub, Twitter } from '@mui/icons-m
 import Link from 'next/link';
 import AuthLayout from '@/components/AuthLayout';
 import { StyledTextField, SocialButton, PrimaryButton } from '@/styles/authStyles';
-import { useLogin } from '@/hooks/useLogin';
 import { LoginFormData } from '@/types/auth/auth';
+import { useLogin } from '@/hooks/login/useLogin';
 
-export default function LoginPage() {
+export default function LoginForm() {
   const { 
     login, 
     loginWithProvider, 
@@ -152,7 +151,7 @@ export default function LoginPage() {
 
           <Typography
             component={Link}
-            href="/forgot-password"
+            href="/forgetPassword"
             variant="body2"
             sx={{
               color: 'text.secondary',
