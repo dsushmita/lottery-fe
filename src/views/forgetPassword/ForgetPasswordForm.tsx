@@ -6,7 +6,6 @@ import AuthLayout from '@/components/AuthLayout';
 import { StyledTextField } from '@/styles/authStyles';
 
 export default function ForgotPasswordForm() {
-  console.log("page pass here")
   const {
     register,
     handleSubmit,
@@ -43,13 +42,22 @@ export default function ForgotPasswordForm() {
           </Typography>
 
           <Typography variant="body1" sx={{ mb: 4, color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.6 }}>
-            Check your email and open the link to continue
+            Check your email and open the link to continue. The email may take a few minutes to arrive.
           </Typography>
 
           <Button
             onClick={resendEmail}
             disabled={loading}
-            sx={{ mb: 2, color: '#6366f1' }}
+            variant="outlined"
+            sx={{ 
+              mb: 2, 
+              color: '#6366f1',
+              borderColor: '#6366f1',
+              '&:hover': {
+                borderColor: '#5855eb',
+                bgcolor: 'rgba(99, 102, 241, 0.1)'
+              }
+            }}
           >
             {loading ? 'Sending...' : 'Resend Email'}
           </Button>
@@ -84,11 +92,25 @@ export default function ForgotPasswordForm() {
       </Typography>
 
       <Typography variant="body1" sx={{ mb: 4, color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.6 }}>
-        Enter your email and we'll send you a email to reset your password.
+        Enter your email and we'll send you a link to reset your password.
       </Typography>
 
       {error && (
-        <Alert severity="error" sx={{ mb: 3 }} onClose={clearError}>
+        <Alert 
+          severity="error" 
+          sx={{ mb: 3 }} 
+          onClose={clearError}
+          action={
+            <Button 
+              color="inherit" 
+              size="small" 
+              onClick={clearError}
+              sx={{ color: 'white' }}
+            >
+              ✕
+            </Button>
+          }
+        >
           {error.message}
         </Alert>
       )}
@@ -103,7 +125,8 @@ export default function ForgotPasswordForm() {
             },
           })}
           fullWidth
-          label="Username or Email"
+          label="Enter your email address"
+          placeholder="example@domain.com"
           variant="outlined"
           error={!!errors.email}
           helperText={errors.email?.message}
@@ -127,7 +150,7 @@ export default function ForgotPasswordForm() {
             borderRadius: 2,
           }}
         >
-          {loading ? 'Sending...' : 'Reset Password'}
+          {loading ? 'Sending Reset Link...' : 'Send Reset Link'}
         </Button>
       </form>
 

@@ -76,12 +76,6 @@ class AuthService {
       throw new Error(error instanceof Error ? error.message : "Login failed");
     }
   }
-
-  // Social logins
-  async loginWithGoogle(): Promise<LoginResponse> {
-    return httpClient.post<LoginResponse>("/auth/google");
-  }
-
   async loginWithTwitter(): Promise<LoginResponse> {
     return httpClient.post<LoginResponse>("/auth/twitter");
   }
@@ -104,7 +98,7 @@ class AuthService {
 
   // Forgot password
   async forgotPassword(data: ForgotPasswordData): Promise<void> {
-    await httpClient.post("/auth/forgetPassword", data);
+    await httpClient.post("/auth/forgot-password", data);
   }
 
   // Reset password
@@ -173,6 +167,25 @@ class AuthService {
       throw new Error(error instanceof Error ? error.message : "Signup failed");
     }
   }
+
+
+  async loginWithGoogle(idToken: string): Promise<LoginResponse> {
+    try {
+      const data = await httpClient.post<LoginResponse>("/auth/google-login", {
+        idToken, // backend expects this field
+      });
+
+      if (data.success && data.token && data.user) {
+        this.setToken(data.token);
+        this.setUser(data.user);
+      }
+
+      return data;
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : "Google login failed");
+    }
+  }
 }
+
 
 export const authService = new AuthService();

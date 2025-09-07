@@ -54,7 +54,7 @@ export const LeftPanel = styled(Box)(({ theme }) => ({
   justifyContent: 'space-between',
   color: 'white',
   position: 'relative',
-  padding: theme.spacing(6),
+  padding: theme.spacing(4),
   paddingBottom: 0,
   minHeight: 300,
   
@@ -73,16 +73,16 @@ export const LeftPanel = styled(Box)(({ theme }) => ({
 export const RightPanel = styled(Box)(({ theme }) => ({
   flex: 1,
   backgroundColor: theme.custom?.auth?.rightPanelBg || '#242A3A',
-  padding: theme.spacing(6),
+  padding: theme.spacing(4),
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'center',
+  // justifyContent: 'center',
   
   [theme.breakpoints.down('md')]: {
     flex: 1,
     padding: theme.spacing(4, 3),
     justifyContent: 'flex-start',
-    paddingTop: theme.spacing(6),
+    paddingTop: theme.spacing(4),
   },
   
   [theme.breakpoints.down('sm')]: {

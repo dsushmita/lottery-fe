@@ -16,6 +16,7 @@ import AuthLayout from '@/components/AuthLayout';
 import { StyledTextField, SocialButton, PrimaryButton } from '@/styles/authStyles';
 import { LoginFormData } from '@/types/auth/auth';
 import { useLogin } from '@/hooks/login/useLogin';
+import GoogleLoginButton from '@/components/GoogleLoginButton';
 
 export default function LoginForm() {
   const { 
@@ -47,12 +48,12 @@ export default function LoginForm() {
     login(data);
   };
 
-  const handleSocialLogin = (provider: 'google' | 'twitter' | 'discord') => {
+  const handleSocialLogin = (provider: 'twitter' | 'discord') => {
     clearError();
     loginWithProvider(provider);
   };
 
-  return (
+  return ( 
     <AuthLayout>
       <Typography variant="h4" sx={{ mb: 1, fontWeight: 600, color: 'text.primary' }}>
         Login to your account
@@ -180,18 +181,15 @@ export default function LoginForm() {
       </Divider>
 
       <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
-        <SocialButton 
-          onClick={() => handleSocialLogin('google')} 
-          disabled={loading}
-        >
-          <Google />
-        </SocialButton>
+        <GoogleLoginButton disabled={loading} />
+        
         <SocialButton 
           onClick={() => handleSocialLogin('twitter')} 
           disabled={loading}
         >
           <Twitter />
         </SocialButton>
+        
         <SocialButton 
           onClick={() => handleSocialLogin('discord')} 
           disabled={loading}
@@ -199,6 +197,10 @@ export default function LoginForm() {
           <GitHub />
         </SocialButton>
       </Box>
+
+      <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
+        <GoogleLoginButton variant="button" disabled={loading} />
+      </Box>
     </AuthLayout>
-  );
+  ); 
 }

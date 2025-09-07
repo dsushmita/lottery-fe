@@ -3,6 +3,7 @@ import { CustomThemeProvider } from '@/context/ThemeContext';
 import { CssBaseline } from '@mui/material';
 import './globals.css';
 import type { Metadata } from 'next';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'COP THEM - Lottery Application',
@@ -16,6 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          src="https://accounts.google.com/gsi/client"
+          strategy="beforeInteractive"
+        />
+      </head>
       <body>
         <CustomThemeProvider>
           <CssBaseline />
