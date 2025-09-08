@@ -1,649 +1,354 @@
-"use client";
-
-import React, { useState } from 'react';
-import { Box, Button, TextField, Typography, FormControlLabel, Checkbox, Link, Alert, IconButton, InputAdornment } from '@mui/material';
-import { Google, Twitter, Visibility, VisibilityOff } from '@mui/icons-material';
-import { useForm, Controller } from 'react-hook-form';
-import Image from 'next/image';
-import { SignupFormData } from '@/types/auth/signup';
-
-import geometricBackground from "../../../public/image/bgimage.png";
-import logoImage from "../../../public/image/companylogo.png";
+'use client';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Alert,
+  InputAdornment,
+  IconButton,
+  Checkbox,
+  FormControlLabel,
+} from '@mui/material';
+import {
+  Person,
+  Email,
+  Lock,
+  Visibility,
+  VisibilityOff,
+} from '@mui/icons-material';
+import Link from 'next/link';
+import { SocialButton } from '@/styles/authStyles';
 import { useSignup } from '@/hooks/signup/UseSignup';
+import AuthLayout from '@/components/AuthLayout';
 
-const SignupForm = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+interface SignupFormData {
+  userName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  acceptTerms: boolean;
+}
+
+const SignupForm: React.FC = () => {
+  const {
+    signup,
+    signupWithProvider,
+    togglePasswordVisibility,
+    toggleConfirmPasswordVisibility,
+    clearError,
+    loading,
+    error,
+    showPassword,
+    showConfirmPassword,
+  } = useSignup();
 
   const {
-    control,
+    register,
     handleSubmit,
     formState: { errors },
     watch,
-    setError,
-  } = useForm<SignupFormData>({
-    defaultValues: {
-      userName: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-      acceptTerms: false
-    },
-  });
+  } = useForm<SignupFormData>();
 
-  const { handleSignup, loading, error } = useSignup();
-
-  // Watch password for confirmation validation
   const password = watch('password');
 
   const onSubmit = async (data: SignupFormData) => {
-    console.log('Signup form submitted with:', {
-      userName: data.userName,
-      email: data.email,
-      acceptTerms: data.acceptTerms
-    });
-
-    // Clear any previous errors
-    setError('root', { message: '' });
-
-    // Extract credentials without confirmPassword and acceptTerms
-    const credentials = {
-      username: data.userName,
-      email: data.email,
-      password: data.password
-    };
-
-    try {
-      await handleSignup(credentials);
-      // Navigation will be handled by the useSignup hook
-    } catch (error) {
-      console.error('Signup submission error:', error);
+    if (data.password !== data.confirmPassword) {
+      return;
     }
+    if (!data.acceptTerms) {
+      return;
+    }
+    await signup(data);
   };
 
-  const togglePasswordVisibility = () => setShowPassword(!showPassword);
-  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
-
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        height: '100vh',
-        width: '100vw',
-        backgroundImage: `url(${geometricBackground.src})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Main Centered Container */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexDirection: 'row',
-          height: '100vh',
-          padding: 8
-
-        }}
-      >
-        {/* Left Section with Logo and Text */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between', // Space between the elements 
-            alignItems: 'center',
-            width: '50%',
-            height: '100%',
-            backgroundColor: '#0B0F14',
-            padding: { xs: 3, md: 4 },
+    <AuthLayout>
+      <Box sx={{ width: '100%', maxWidth: 400 }}>
+        <Typography 
+          variant="h4" 
+          component="h1" 
+          gutterBottom 
+          sx={{ 
+            color: 'white', 
+            fontWeight: 'bold',
+            textAlign: 'center',
+            mb: 1
           }}
         >
-          {/* Wrapping Typography inside a Box */}
-          <Box sx={{ marginBottom: 4, textAlign: 'center' }}>
-            <Typography
-              variant="h1"
-              sx={{
-                fontWeight: 800,
-                color: 'white',
-                fontSize: { xs: '3rem', md: '4rem' },
-                letterSpacing: '0.1em',
-                textShadow: '0 4px 8px rgba(0,0,0,0.5)',
-              }}
-            >
-              COP THEM
-            </Typography>
-          </Box>
-
-          <Box
-            sx={{
-              position: 'relative',
-              filter: 'drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6))',
-            }}
-          >
-            <Image
-              src={logoImage}
-              alt="COP THEM Logo"
-              width={250}
-              height={250}
-              style={{
-                maxWidth: '100%',
-                height: 'auto',
-              }}
-              priority
-            />
-          </Box>
-        </Box>
-
-
-        {/* Right Section with Signup Form */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '50%',
-            height: '100%',
+          Create your account
+        </Typography>
+        
+        <Typography 
+          variant="body2" 
+          sx={{ 
+            color: 'rgba(255, 255, 255, 0.7)', 
+            textAlign: 'center',
+            mb: 4
           }}
         >
-          <Box
-            sx={{
-              backgroundColor: 'rgba(15, 25, 40, 0.95)',
-              padding: { xs: 3, md: 4 },
-              width: '100%',
-              maxWidth: '450px',
-              backdropFilter: 'blur(20px)',
-              height: '100vh'
-            }}
-          >
-            <Typography
-              variant="h4"
-              sx={{
-                color: 'white',
-                marginBottom: 1,
-                fontWeight: 600,
-                textAlign: 'center',
-                fontSize: { xs: '1.5rem', md: '1.75rem' },
-              }}
-            >
-              Create your account
-            </Typography>
+          Already have an account?{' '}
+          <Link href="/login" style={{ color: '#0ea5e9', textDecoration: 'none' }}>
+            Login here
+          </Link>
+        </Typography>
 
-            <Typography
-              variant="body2"
-              sx={{
+        {error && (
+          <Alert 
+            severity="error" 
+            sx={{ mb: 2 }}
+            onClose={clearError}
+          >
+            {error.message}
+          </Alert>
+        )}
+
+        <Box component="form" onSubmit={handleSubmit(onSubmit)}>
+          {/* Username Field */}
+          <TextField
+            fullWidth
+            label="Username"
+            type="text"
+            {...register('userName', { 
+              required: 'Username is required',
+              minLength: { value: 3, message: 'Username must be at least 3 characters' }
+            })}
+            error={!!errors.userName}
+            helperText={errors.userName?.message}
+            sx={{
+              mb: 2,
+              '& .MuiOutlinedInput-root': {
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+                '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+                '&.Mui-focused fieldset': { borderColor: '#0ea5e9' },
+                '& input': { color: 'white' },
+              },
+              '& .MuiInputLabel-root': {
                 color: 'rgba(255, 255, 255, 0.7)',
-                marginBottom: 3,
-                textAlign: 'center',
-                fontSize: '0.9rem',
-              }}
-            >
-              Already have an account?{' '}
-              <Link
-                href="/login"
-                sx={{
-                  color: '#4fc3f7',
-                  textDecoration: 'none',
-                  fontWeight: 500,
-                  '&:hover': {
-                    textDecoration: 'underline',
-                    color: '#29b6f6'
-                  },
-                }}
-              >
-                Login here
-              </Link>
-            </Typography>
+                '&.Mui-focused': { color: '#0ea5e9' },
+              },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Person sx={{ color: 'rgba(255, 255, 255, 0.7)' }} />
+                </InputAdornment>
+              ),
+            }}
+          />
 
-            {/* Error Alert */}
-            {error && (
-              <Alert
-                severity="error"
-                sx={{
-                  width: '100%',
-                  marginBottom: 2,
-                  backgroundColor: 'rgba(211, 47, 47, 0.1)',
-                  color: 'white',
-                  '& .MuiAlert-icon': {
-                    color: '#f44336'
-                  }
-                }}
-              >
-                {error}
-              </Alert>
-            )}
+          {/* Email Field */}
+          <TextField
+            fullWidth
+            label="Email Address"
+            type="email"
+            {...register('email', { 
+              required: 'Email is required',
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: 'Invalid email address'
+              }
+            })}
+            error={!!errors.email}
+            helperText={errors.email?.message}
+            sx={{
+              mb: 2,
+              '& .MuiOutlinedInput-root': {
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+                '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+                '&.Mui-focused fieldset': { borderColor: '#0ea5e9' },
+                '& input': { color: 'white' },
+              },
+              '& .MuiInputLabel-root': {
+                color: 'rgba(255, 255, 255, 0.7)',
+                '&.Mui-focused': { color: '#0ea5e9' },
+              },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Email sx={{ color: 'rgba(255, 255, 255, 0.7)' }} />
+                </InputAdornment>
+              ),
+            }}
+          />
 
-            {/* Form Fields */}
-            <form onSubmit={handleSubmit(onSubmit)} style={{ width: '100%' }}>
-              {/* Username Field */}
-              <Controller
-                name="userName"
-                control={control}
-                rules={{
-                  required: 'UserName is required',
-                  minLength: { value: 3, message: 'UserName must be at least 3 characters' },
-                  pattern: {
-                    value: /^[a-zA-Z0-9_]+$/,
-                    message: 'UserName can only contain letters, numbers, and underscores'
-                  }
-                }}
-                render={({ field }) => (
-                  <TextField
-                    placeholder="UserName"
-                    variant="outlined"
-                    fullWidth
-                    disabled={loading}
-                    sx={{
-                      marginBottom: 2,
-                      '& .MuiOutlinedInput-root': {
-                        backgroundColor: 'rgba(25, 30, 45, 0.8)',
-                        borderRadius: 2,
-                        transition: 'all 0.2s ease-in-out',
-                        '& fieldset': {
-                          borderColor: 'rgba(255, 255, 255, 0.15)',
-                          borderWidth: '1px',
-                        },
-                        '&:hover fieldset': {
-                          borderColor: 'rgba(255, 255, 255, 0.25)',
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: '#4fc3f7',
-                          borderWidth: '2px',
-                        },
-                        '&.Mui-disabled fieldset': {
-                          borderColor: 'rgba(255, 255, 255, 0.08)',
-                        },
-                      },
-                      '& .MuiInputBase-input': {
-                        color: 'white',
-                        '&::placeholder': {
-                          color: 'rgba(255, 255, 255, 0.5)',
-                          opacity: 1,
-                        },
-                        '&.Mui-disabled': {
-                          color: 'rgba(255, 255, 255, 0.5)',
-                        },
-                      },
-                      '& .MuiFormHelperText-root': {
-                        color: '#f44336',
-                      },
-                    }}
-                    {...field}
-                    error={!!errors.userName}
-                    helperText={errors.userName ? errors.userName.message : ''}
-                  />
-                )}
+          {/* Password Field */}
+          <TextField
+            fullWidth
+            label="Password"
+            type={showPassword ? 'text' : 'password'}
+            {...register('password', { 
+              required: 'Password is required',
+              minLength: { value: 8, message: 'Password must be at least 8 characters' }
+            })}
+            error={!!errors.password}
+            helperText={errors.password?.message}
+            sx={{
+              mb: 2,
+              '& .MuiOutlinedInput-root': {
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+                '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+                '&.Mui-focused fieldset': { borderColor: '#0ea5e9' },
+                '& input': { color: 'white' },
+              },
+              '& .MuiInputLabel-root': {
+                color: 'rgba(255, 255, 255, 0.7)',
+                '&.Mui-focused': { color: '#0ea5e9' },
+              },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Lock sx={{ color: 'rgba(255, 255, 255, 0.7)' }} />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={togglePasswordVisibility}
+                    edge="end"
+                    sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          {/* Confirm Password Field */}
+          <TextField
+            fullWidth
+            label="Confirm Password"
+            type={showConfirmPassword ? 'text' : 'password'}
+            {...register('confirmPassword', { 
+              required: 'Please confirm your password',
+              validate: value => value === password || 'Passwords do not match'
+            })}
+            error={!!errors.confirmPassword}
+            helperText={errors.confirmPassword?.message}
+            sx={{
+              mb: 2,
+              '& .MuiOutlinedInput-root': {
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+                '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+                '&.Mui-focused fieldset': { borderColor: '#0ea5e9' },
+                '& input': { color: 'white' },
+              },
+              '& .MuiInputLabel-root': {
+                color: 'rgba(255, 255, 255, 0.7)',
+                '&.Mui-focused': { color: '#0ea5e9' },
+              },
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Lock sx={{ color: 'rgba(255, 255, 255, 0.7)' }} />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={toggleConfirmPasswordVisibility}
+                    edge="end"
+                    sx={{ color: 'rgba(255, 255, 255, 0.7)' }}
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+
+          {/* Terms Checkbox */}
+          <FormControlLabel
+            control={
+              <Checkbox 
+                {...register('acceptTerms', { required: 'You must accept the terms' })}
+                sx={{ 
+                  color: 'rgba(255, 255, 255, 0.7)',
+                  '&.Mui-checked': { color: '#0ea5e9' }
+                }} 
               />
+            }
+            label={
+              <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                I am 18+ and have read and accept the{' '}
+                <Link href="/terms" style={{ color: '#0ea5e9', textDecoration: 'none' }}>
+                  Terms and Conditions
+                </Link>
+                .
+              </Typography>
+            }
+            sx={{ mb: 3 }}
+          />
 
-              {/* Email Field */}
-              <Controller
-                name="email"
-                control={control}
-                rules={{
-                  required: 'Email is required',
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: 'Invalid email address'
-                  }
-                }}
-                render={({ field }) => (
-                  <TextField
-                    placeholder="Email Address"
-                    variant="outlined"
-                    fullWidth
-                    type="email"
-                    autoComplete="email"
-                    disabled={loading}
-                    sx={{
-                      marginBottom: 2,
-                      '& .MuiOutlinedInput-root': {
-                        backgroundColor: 'rgba(25, 30, 45, 0.8)',
-                        borderRadius: 2,
-                        transition: 'all 0.2s ease-in-out',
-                        '& fieldset': {
-                          borderColor: 'rgba(255, 255, 255, 0.15)',
-                          borderWidth: '1px',
-                        },
-                        '&:hover fieldset': {
-                          borderColor: 'rgba(255, 255, 255, 0.25)',
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: '#4fc3f7',
-                          borderWidth: '2px',
-                        },
-                        '&.Mui-disabled fieldset': {
-                          borderColor: 'rgba(255, 255, 255, 0.08)',
-                        },
-                      },
-                      '& .MuiInputBase-input': {
-                        color: 'white',
-                        '&::placeholder': {
-                          color: 'rgba(255, 255, 255, 0.5)',
-                          opacity: 1,
-                        },
-                        '&.Mui-disabled': {
-                          color: 'rgba(255, 255, 255, 0.5)',
-                        },
-                      },
-                      '& .MuiFormHelperText-root': {
-                        color: '#f44336',
-                      },
-                    }}
-                    {...field}
-                    error={!!errors.email}
-                    helperText={errors.email ? errors.email.message : ''}
-                  />
-                )}
-              />
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            size="large"
+            disabled={loading}
+            sx={{
+              mb: 3,
+              py: 1.5,
+              backgroundColor: '#0ea5e9',
+              '&:hover': { backgroundColor: '#0284c7' },
+              borderRadius: 2,
+              textTransform: 'none',
+              fontSize: '16px',
+              fontWeight: 'bold',
+            }}
+          >
+            {loading ? 'Creating Account...' : 'Create Account'}
+          </Button>
 
-              {/* Password Field */}
-              <Controller
-                name="password"
-                control={control}
-                rules={{
-                  required: 'Password is required',
-                  minLength: { value: 8, message: 'Password must be at least 8 characters' },
-                  pattern: {
-                    value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-                    message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number'
-                  }
-                }}
-                render={({ field }) => (
-                  <TextField
-                    placeholder="Password"
-                    type={showPassword ? 'text' : 'password'}
-                    variant="outlined"
-                    fullWidth
-                    autoComplete="new-password"
-                    disabled={loading}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={togglePasswordVisibility}
-                            edge="end"
-                            sx={{ color: 'rgba(255, 255, 255, 0.5)' }}
-                            disabled={loading}
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                    sx={{
-                      marginBottom: 2,
-                      '& .MuiOutlinedInput-root': {
-                        backgroundColor: 'rgba(25, 30, 45, 0.8)',
-                        borderRadius: 2,
-                        transition: 'all 0.2s ease-in-out',
-                        '& fieldset': {
-                          borderColor: 'rgba(255, 255, 255, 0.15)',
-                          borderWidth: '1px',
-                        },
-                        '&:hover fieldset': {
-                          borderColor: 'rgba(255, 255, 255, 0.25)',
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: '#4fc3f7',
-                          borderWidth: '2px',
-                        },
-                        '&.Mui-disabled fieldset': {
-                          borderColor: 'rgba(255, 255, 255, 0.08)',
-                        },
-                      },
-                      '& .MuiInputBase-input': {
-                        color: 'white',
-                        '&::placeholder': {
-                          color: 'rgba(255, 255, 255, 0.5)',
-                          opacity: 1,
-                        },
-                        '&.Mui-disabled': {
-                          color: 'rgba(255, 255, 255, 0.5)',
-                        },
-                      },
-                      '& .MuiFormHelperText-root': {
-                        color: '#f44336',
-                      },
-                    }}
-                    {...field}
-                    error={!!errors.password}
-                    helperText={errors.password ? errors.password.message : ''}
-                  />
-                )}
-              />
+          {/* Divider */}
+          <Typography 
+            variant="body2" 
+            sx={{ 
+              color: 'rgba(255, 255, 255, 0.5)', 
+              textAlign: 'center',
+              mb: 2
+            }}
+          >
+            Or
+          </Typography>
 
-              {/* Confirm Password Field */}
-              <Controller
-                name="confirmPassword"
-                control={control}
-                rules={{
-                  required: 'Please confirm your password',
-                  validate: (value) => value === password || 'Passwords do not match'
-                }}
-                render={({ field }) => (
-                  <TextField
-                    placeholder="Confirm Password"
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    variant="outlined"
-                    fullWidth
-                    autoComplete="new-password"
-                    disabled={loading}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            onClick={toggleConfirmPasswordVisibility}
-                            edge="end"
-                            sx={{ color: 'rgba(255, 255, 255, 0.5)' }}
-                            disabled={loading}
-                          >
-                            {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      ),
-                    }}
-                    sx={{
-                      marginBottom: 2,
-                      '& .MuiOutlinedInput-root': {
-                        backgroundColor: 'rgba(25, 30, 45, 0.8)',
-                        borderRadius: 2,
-                        transition: 'all 0.2s ease-in-out',
-                        '& fieldset': {
-                          borderColor: 'rgba(255, 255, 255, 0.15)',
-                          borderWidth: '1px',
-                        },
-                        '&:hover fieldset': {
-                          borderColor: 'rgba(255, 255, 255, 0.25)',
-                        },
-                        '&.Mui-focused fieldset': {
-                          borderColor: '#4fc3f7',
-                          borderWidth: '2px',
-                        },
-                        '&.Mui-disabled fieldset': {
-                          borderColor: 'rgba(255, 255, 255, 0.08)',
-                        },
-                      },
-                      '& .MuiInputBase-input': {
-                        color: 'white',
-                        '&::placeholder': {
-                          color: 'rgba(255, 255, 255, 0.5)',
-                          opacity: 1,
-                        },
-                        '&.Mui-disabled': {
-                          color: 'rgba(255, 255, 255, 0.5)',
-                        },
-                      },
-                      '& .MuiFormHelperText-root': {
-                        color: '#f44336',
-                      },
-                    }}
-                    {...field}
-                    error={!!errors.confirmPassword}
-                    helperText={errors.confirmPassword ? errors.confirmPassword.message : ''}
-                  />
-                )}
-              />
+          {/* Social Login Buttons */}
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
+            <SocialButton onClick={() => signupWithProvider('google')}>
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+            </SocialButton>
 
-              {/* Terms and Conditions Checkbox */}
-              <Box sx={{ marginBottom: 3 }}>
-                <FormControlLabel
-                  control={
-                    <Controller
-                      name="acceptTerms"
-                      control={control}
-                      rules={{ required: 'You must accept the terms and conditions' }}
-                      render={({ field }) => (
-                        <Checkbox
-                          {...field}
-                          disabled={loading}
-                          sx={{
-                            color: 'rgba(255, 255, 255, 0.5)',
-                            '&.Mui-checked': {
-                              color: '#4fc3f7',
-                            },
-                            '&.Mui-disabled': {
-                              color: 'rgba(255, 255, 255, 0.3)',
-                            },
-                          }}
-                        />
-                      )}
-                    />
-                  }
-                  label={
-                    <Typography sx={{
-                      color: loading ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.7)',
-                      fontSize: '0.9rem'
-                    }}>
-                      I am 18+ and have read and accept the{' '}
-                      <Link href="/terms" sx={{ color: '#4fc3f7', textDecoration: 'none' }}>
-                        Terms and Conditions
-                      </Link>
-                    </Typography>
-                  }
-                />
-                {errors.acceptTerms && (
-                  <Typography variant="caption" sx={{ color: '#f44336', marginLeft: 4, fontSize: '0.75rem' }}>
-                    {errors.acceptTerms.message}
-                  </Typography>
-                )}
-              </Box>
+            <SocialButton onClick={() => signupWithProvider('twitter')}>
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M23.643 4.937c-.835.37-1.732.62-2.675.733.962-.576 1.7-1.49 2.048-2.578-.9.534-1.897.922-2.958 1.13-.85-.904-2.06-1.47-3.4-1.47-2.572 0-4.658 2.086-4.658 4.66 0 .364.042.718.12 1.06-3.873-.195-7.304-2.05-9.602-4.868-.4.69-.63 1.49-.63 2.342 0 1.616.823 3.043 2.072 3.878-.764-.025-1.482-.234-2.11-.583v.06c0 2.257 1.605 4.14 3.737 4.568-.392.106-.803.162-1.227.162-.3 0-.593-.028-.877-.082.593 1.85 2.313 3.198 4.352 3.234-1.595 1.25-3.604 1.995-5.786 1.995-.376 0-.747-.022-1.112-.065 2.062 1.323 4.51 2.093 7.14 2.093 8.57 0 13.255-7.098 13.255-13.254 0-.2-.005-.402-.014-.602.91-.658 1.7-1.477 2.323-2.41z"/>
+              </svg>
+            </SocialButton>
 
-              {/* Create Account Button */}
-              <Button
-                variant="contained"
-                fullWidth
-                type="submit"
-                sx={{
-                  backgroundColor: '#4fc3f7',
-                  color: 'white',
-                  marginBottom: 3,
-                  padding: '14px',
-                  borderRadius: 2,
-                  fontWeight: 600,
-                  fontSize: '1rem',
-                  textTransform: 'none',
-                  letterSpacing: '0.5px',
-                  boxShadow: '0 4px 12px rgba(79, 195, 247, 0.3)',
-                  transition: 'all 0.2s ease-in-out',
-                  '&:hover': {
-                    backgroundColor: '#29b6f6',
-                    boxShadow: '0 6px 16px rgba(79, 195, 247, 0.4)',
-                    transform: 'translateY(-1px)',
-                  },
-                  '&:disabled': {
-                    backgroundColor: 'rgba(79, 195, 247, 0.5)',
-                    color: 'rgba(255, 255, 255, 0.7)',
-                    boxShadow: 'none',
-                    transform: 'none',
-                  },
-                }}
-                disabled={loading}
-              >
-                {loading ? 'Creating Account...' : 'Create Account'}
-              </Button>
-
-              <Box sx={{
-                textAlign: 'center',
-                marginBottom: 3,
-                color: 'rgba(255, 255, 255, 0.5)',
-                fontSize: '0.9rem',
-                fontWeight: 500,
-              }}>
-                Or
-              </Box>
-
-              {/* Social Login Buttons */}
-              <Box sx={{ display: 'flex', gap: 1.5, justifyContent: 'center', width: '100%' }}>
-                <Button
-                  variant="outlined"
-                  startIcon={<Google />}
-                  disabled={loading}
-                  sx={{
-                    borderRadius: 2,
-                    color: 'white',
-                    borderColor: 'rgba(255, 255, 255, 0.15)',
-                    backgroundColor: 'rgba(45, 55, 75, 0.6)',
-                    flex: 1,
-                    padding: '12px 8px',
-                    fontSize: '0.9rem',
-                    fontWeight: 500,
-                    transition: 'all 0.2s ease-in-out',
-                    '&:hover': {
-                      borderColor: 'rgba(255, 255, 255, 0.3)',
-                      backgroundColor: 'rgba(65, 75, 95, 0.8)',
-                      transform: 'translateY(-1px)',
-                    },
-                    '&:disabled': {
-                      borderColor: 'rgba(255, 255, 255, 0.08)',
-                      backgroundColor: 'rgba(25, 35, 55, 0.4)',
-                      color: 'rgba(255, 255, 255, 0.4)',
-                      transform: 'none',
-                    },
-                  }}
-                >
-                  Google
-                </Button>
-                <Button
-                  variant="outlined"
-                  startIcon={<Twitter />}
-                  disabled={loading}
-                  sx={{
-                    borderRadius: 2,
-                    color: 'white',
-                    borderColor: 'rgba(255, 255, 255, 0.15)',
-                    backgroundColor: 'rgba(45, 55, 75, 0.6)',
-                    flex: 1,
-                    padding: '12px 8px',
-                    fontSize: '0.9rem',
-                    fontWeight: 500,
-                    transition: 'all 0.2s ease-in-out',
-                    '&:hover': {
-                      borderColor: 'rgba(255, 255, 255, 0.3)',
-                      backgroundColor: 'rgba(65, 75, 95, 0.8)',
-                      transform: 'translateY(-1px)',
-                    },
-                    '&:disabled': {
-                      borderColor: 'rgba(255, 255, 255, 0.08)',
-                      backgroundColor: 'rgba(25, 35, 55, 0.4)',
-                      color: 'rgba(255, 255, 255, 0.4)',
-                      transform: 'none',
-                    },
-                  }}
-                >
-                  Twitter
-                </Button>
-              </Box>
-            </form>
+            <SocialButton onClick={() => signupWithProvider('discord')}>
+              <svg width="20" height="20" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0189 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/>
+              </svg>
+            </SocialButton>
           </Box>
         </Box>
       </Box>
-    </Box>
+    </AuthLayout>
   );
 };
 

@@ -23,7 +23,7 @@ export interface LoginResponse {
   message?: string;
 }
 export interface SignupFormData {
-  name: string;
+  userName: string;
   email: string;
   password: string;
   confirmPassword: string;
