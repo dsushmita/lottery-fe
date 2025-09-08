@@ -154,7 +154,7 @@ class AuthService {
   ): Promise<SignupResponse> {
     try {
       const data = await httpClient.post<SignupResponse>(
-        "/auth/signup",
+        "/auth/register",
         credentials
       );
 

@@ -65,7 +65,7 @@ export default function LoginForm() {
         </Typography>
         <Typography
           component={Link}
-          href="/signup"
+          href="/register"
           variant="body2"
           sx={{
             color: 'primary.main',
