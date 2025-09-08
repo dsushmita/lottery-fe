@@ -91,7 +91,7 @@ class HttpClient {
     const safeData = { ...data };
     
     // Hide sensitive fields
-    const sensitiveFields = ['password', 'confirmPassword', 'newPassword', 'currentPassword'];
+    const sensitiveFields = ['password', 'confirmPassword', 'userId', 'currentPassword'];
     sensitiveFields.forEach(field => {
       if (safeData[field]) {
         safeData[field] = '***';

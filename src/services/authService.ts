@@ -108,6 +108,7 @@ class AuthService {
     await httpClient.post("/auth/reset-password", {
       password: data.password,
       token: data.token,
+      userId: data.userId
     });
   }
 

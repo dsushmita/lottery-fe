@@ -44,6 +44,7 @@ export interface ResetPasswordData {
   password: string;
   confirmPassword: string;
   token: string;
+  userId: string;
 }
 
 export interface AuthError {

@@ -152,7 +152,7 @@ export default function LoginForm() {
 
           <Typography
             component={Link}
-            href="/forgetPassword"
+            href="/forget-password"
             variant="body2"
             sx={{
               color: 'text.secondary',

@@ -10,20 +10,22 @@ export const useResetPassword = () => {
   const [success, setSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
+  const userId = searchParams.get('userId');
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<Omit<ResetPasswordData, 'token'>>();
+  } = useForm<Omit<ResetPasswordData, 'token' | 'userId'>>();
 
   const password = watch('password');
 
-  const resetPassword = async (data: Omit<ResetPasswordData, 'token'>) => {
+  const resetPassword = async (data: Omit<ResetPasswordData, 'token' | 'userId'>) => {
     setLoading(true);
     setError(null);
 
@@ -32,36 +34,43 @@ export const useResetPassword = () => {
         setError({ message: 'Invalid reset token' });
         return;
       }
-      
+
+      if (!userId) {
+        setError({ message: 'User ID parameter missing from reset link' });
+        return;
+      }
+
+      if (data.password !== data.confirmPassword) {
+        setError({ message: 'Passwords do not match' });
+        return;
+      }
+
+      // Call service with email from URL
       await authService.resetPassword({
         password: data.password,
-        token,
+        token: token,
+        userId: userId,
       });
+
+      // If we reach here without error, the reset was successful
       setSuccess(true);
+      
+      // Redirect to login after 3 seconds
+      setTimeout(() => {
+        router.push('/login');
+      }, 3000);
+
     } catch (err) {
-      setError({
-        message: err instanceof Error ? err.message : 'Failed to reset password'
+      setError({ 
+        message: err instanceof Error ? err.message : 'Failed to reset password' 
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const goToLogin = () => {
-    router.push('/login');
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword(prev => !prev);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(prev => !prev);
-  };
-
-  const clearError = () => {
-    setError(null);
-  };
+  const clearError = () => setError(null);
+  const goToLogin = () => router.push('/login');
 
   return {
     register,
@@ -71,11 +80,13 @@ export const useResetPassword = () => {
     error,
     success,
     password,
+    token,
+    userId,
     showPassword,
+    setShowPassword,
     showConfirmPassword,
-    togglePasswordVisibility,
-    toggleConfirmPasswordVisibility,
-    goToLogin,
+    setShowConfirmPassword,
     clearError,
+    goToLogin,
   };
 };

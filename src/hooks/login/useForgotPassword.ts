@@ -20,11 +20,14 @@ export const useForgotPassword = () => {
     setError(null);
 
     try {
+      // Your service returns void, so just call it
       await authService.forgotPassword(data);
+      
+      // If no error thrown, assume success
       setEmailSent(true);
     } catch (err) {
-      setError({
-        message: err instanceof Error ? err.message : 'Failed to send reset email'
+      setError({ 
+        message: err instanceof Error ? err.message : 'Failed to send reset email' 
       });
     } finally {
       setLoading(false);
@@ -38,9 +41,7 @@ export const useForgotPassword = () => {
     }
   };
 
-  const clearError = () => {
-    setError(null);
-  };
+  const clearError = () => setError(null);
 
   return {
     register,
