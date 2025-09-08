@@ -41,9 +41,7 @@ export const useLogin = () => {
     try {
       let response;
       switch (provider) {
-        case 'google':
-          response = await authService.loginWithGoogle();
-          break;
+       
         case 'twitter':
           response = await authService.loginWithTwitter();
           break;
