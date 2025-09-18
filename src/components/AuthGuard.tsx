@@ -13,7 +13,7 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  const publicRoutes = ['/login', '/signup', '/forget-password', '/reset-password'];
+  const publicRoutes = ['/login', '/register', '/forget-password', '/reset-password'];
   const isPublicRoute = publicRoutes.includes(pathname);
 
   useEffect(() => {

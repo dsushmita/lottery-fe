@@ -5,7 +5,7 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Define route types
-  const authRoutes = ['/login', '/signup', '/forget-password', '/reset-password'];
+  const authRoutes = ['/login', '/register', '/forget-password', '/reset-password'];
   const protectedRoutes = ['/dashboard', '/settings', '/profile'];
   const publicRoutes = ['/about', '/contact', '/terms'];
 
