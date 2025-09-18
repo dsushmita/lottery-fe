@@ -1,22 +1,20 @@
-'use client';
 import { useForm } from 'react-hook-form';
 import {
   Typography,
   Checkbox,
   FormControlLabel,
-  IconButton,
-  InputAdornment,
   Alert,
-  Divider,
   Box,
 } from '@mui/material';
-import { Visibility, VisibilityOff, Google, GitHub, Twitter } from '@mui/icons-material';
 import Link from 'next/link';
 import AuthLayout from '@/components/AuthLayout';
-import { StyledTextField, SocialButton, PrimaryButton } from '@/styles/authStyles';
+import { PrimaryButton } from '@/styles/authStyles';
 import { LoginFormData } from '@/types/auth/auth';
 import { useLogin } from '@/hooks/login/useLogin';
-import GoogleLoginButton from '@/components/GoogleLoginButton';
+import { AuthTextField } from '@/components/auth/AuthTextField';
+import { AuthHeader } from '@/components/auth/AuthHeader';
+import { SocialLoginSection } from '@/components/auth/SocialLoginButtons';
+
 
 export default function LoginForm() {
   const { 
@@ -48,35 +46,20 @@ export default function LoginForm() {
     login(data);
   };
 
-  const handleSocialLogin = (provider: 'twitter' | 'discord') => {
+  const handleSocialLogin = (provider: 'twitter' | 'discord' | 'google') => {
     clearError();
-    loginWithProvider(provider);
+    loginWithProvider(provider as 'twitter' | 'discord');
   };
 
   return ( 
     <AuthLayout>
-      <Typography variant="h4" sx={{ mb: 1, fontWeight: 600, color: 'text.primary' }}>
-        Login to your account
-      </Typography>
-
-      <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Don't have an account yet?
-        </Typography>
-        <Typography
-          component={Link}
-          href="/signup"
-          variant="body2"
-          sx={{
-            color: 'primary.main',
-            textDecoration: 'none',
-            fontWeight: 500,
-            '&:hover': { textDecoration: 'underline' },
-          }}
-        >
-          Create Account
-        </Typography>
-      </Box>
+      <AuthHeader
+        title="Login to your account"
+        subtitle="Don't have an account yet?"
+        linkText="Create Account"
+        linkHref="/signup"
+        variant="login"
+      />
 
       {error && (
         <Alert severity="error" sx={{ mb: 2 }} onClose={clearError}>
@@ -85,51 +68,39 @@ export default function LoginForm() {
       )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        <StyledTextField
-          {...register('email', {
+        <AuthTextField
+          name="email"
+          label="Username or Email"
+          register={register}
+          error={errors.email}
+          disabled={loading}
+          validation={{
             required: 'Email is required',
             pattern: {
               value: /^\S+@\S+$/i,
               message: 'Please enter a valid email',
             },
-          })}
-          fullWidth
-          label="Username or Email"
-          variant="outlined"
-          error={!!errors.email}
-          helperText={errors.email?.message}
-          disabled={loading}
+          }}
+          variant="login"
         />
 
-        <StyledTextField
-          {...register('password', {
+        <AuthTextField
+          name="password"
+          label="Password"
+          type="password"
+          register={register}
+          error={errors.password}
+          disabled={loading}
+          showPassword={showPassword}
+          onTogglePassword={togglePasswordVisibility}
+          validation={{
             required: 'Password is required',
             minLength: {
               value: 6,
               message: 'Password must be at least 6 characters',
             },
-          })}
-          fullWidth
-          label="Password"
-          type={showPassword ? 'text' : 'password'}
-          variant="outlined"
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          disabled={loading}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  onClick={togglePasswordVisibility}
-                  edge="end"
-                  sx={{ color: 'text.secondary' }}
-                  disabled={loading}
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
           }}
+          variant="login"
         />
 
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
@@ -174,33 +145,15 @@ export default function LoginForm() {
         </PrimaryButton>
       </form>
 
-      <Divider sx={{ mb: 3, bgcolor: 'divider' }}>
-        <Typography variant="body2" sx={{ color: 'text.secondary', px: 2 }}>
-          Or
-        </Typography>
-      </Divider>
-
-      <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
-        <GoogleLoginButton disabled={loading} />
-        
-        <SocialButton 
-          onClick={() => handleSocialLogin('twitter')} 
-          disabled={loading}
-        >
-          <Twitter />
-        </SocialButton>
-        
-        <SocialButton 
-          onClick={() => handleSocialLogin('discord')} 
-          disabled={loading}
-        >
-          <GitHub />
-        </SocialButton>
-      </Box>
-
-      <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center' }}>
-        <GoogleLoginButton variant="button" disabled={loading} />
-      </Box>
+      <SocialLoginSection
+        onSocialLogin={handleSocialLogin}
+        disabled={loading}
+        variant="login"
+        showGoogle={true}
+        showTwitter={true}
+        showDiscord={true}
+      />
     </AuthLayout>
   ); 
 }
+
