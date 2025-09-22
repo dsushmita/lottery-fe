@@ -5,6 +5,7 @@ import geometricBackground from "../../public/image/bgimage.png";
 
 export const AuthContainer = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
+  
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -21,10 +22,10 @@ export const AuthContainer = styled(Box)(({ theme }) => ({
 
 export const FormContainer = styled(Paper)(({ theme }) => ({
   display: 'flex',
-  width: '100%',
-  maxWidth: 900,
-  height: 600,
-  borderRadius: 16,
+  // width: '100%',
+  // maxWidth: 900,
+  // height: 600,
+  borderRadius: 8,
   overflow: 'hidden',
   boxShadow: theme.palette.mode === 'dark' 
     ? '0 20px 60px rgba(0, 0, 0, 0.5)' 
@@ -45,16 +46,17 @@ export const FormContainer = styled(Paper)(({ theme }) => ({
 
 export const LeftPanel = styled(Box)(({ theme }) => ({
   flex: 1,
-  backgroundImage: `url(${leftSideImage.src})`,
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
+  // backgroundImage: `url(${leftSideImage.src})`,
+  // backgroundSize: 'cover',
+  // backgroundPosition: 'center',
+  backgroundColor: '#0B0F14',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'space-between',
   color: 'white',
   position: 'relative',
-  padding: theme.spacing(4),
+  padding: theme.spacing(2),
   paddingBottom: 0,
   minHeight: 300,
   
@@ -71,11 +73,11 @@ export const LeftPanel = styled(Box)(({ theme }) => ({
 }));
 
 export const RightPanel = styled(Box)(({ theme }) => ({
-  flex: 1,
+  // flex: 1,
   backgroundColor: theme.custom?.auth?.rightPanelBg || '#242A3A',
-  padding: theme.spacing(4),
-  display: 'flex',
-  flexDirection: 'column',
+  padding: theme.spacing(2),
+  // display: 'flex',
+  // flexDirection: 'column',
   // justifyContent: 'center',
   
   [theme.breakpoints.down('md')]: {

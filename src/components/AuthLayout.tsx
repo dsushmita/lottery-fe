@@ -9,7 +9,7 @@ import {
   RightPanel,
   LogoContainer
 } from '@/styles/authStyles';
-import { useTheme } from '@/context/ThemeContext';
+// import { useTheme } from '@/context/ThemeContext';
 import Image from 'next/image';
 import logoImage from "../../public/image/companylogo.png";
 
@@ -18,21 +18,21 @@ interface AuthLayoutProps {
 }
 
 const AuthLayout: React.FC<AuthLayoutProps> = ({ children }) => {
-  const { toggleTheme, isDarkMode } = useTheme();
+  // const { toggleTheme, isDarkMode } = useTheme();
 
   return (
     <AuthContainer>
       {/* Theme Toggle Button */}
       <Box sx={{ position: 'fixed', top: 20, right: 20, zIndex: 1000 }}>
         <IconButton
-          onClick={toggleTheme}
+          // onClick={toggleTheme}
           sx={{
             bgcolor: 'rgba(255, 255, 255, 0.1)',
             color: 'white',
             '&:hover': { bgcolor: 'rgba(255, 255, 255, 0.2)' }
           }}
         >
-          {isDarkMode ? <Brightness7 /> : <Brightness4 />}
+          {/* {isDarkMode ? <Brightness7 /> : <Brightness4 />} */}
         </IconButton>
       </Box>
       <FormContainer elevation={0}>

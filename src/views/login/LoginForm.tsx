@@ -57,7 +57,7 @@ export default function LoginForm() {
         title="Login to your account"
         subtitle="Don't have an account yet?"
         linkText="Create Account"
-        linkHref="/signup"
+        linkHref="/register"
         variant="login"
       />
 
