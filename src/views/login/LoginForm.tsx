@@ -70,7 +70,7 @@ export default function LoginForm() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <AuthTextField
           name="email"
-          label="Username or Email"
+          placeholder="Username or Email"
           register={register}
           error={errors.email}
           disabled={loading}
@@ -86,7 +86,7 @@ export default function LoginForm() {
 
         <AuthTextField
           name="password"
-          label="Password"
+          placeholder="Password"
           type="password"
           register={register}
           error={errors.password}

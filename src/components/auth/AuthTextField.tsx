@@ -5,7 +5,7 @@ import { StyledTextField } from '@/styles/authStyles';
 
 interface AuthTextFieldProps {
   name: string;
-  label: string;
+placeholder: string;           
   type?: string;
   register: any; // Keep it flexible to work with your existing forms
   error?: any;
@@ -20,7 +20,7 @@ interface AuthTextFieldProps {
 
 export const AuthTextField: React.FC<AuthTextFieldProps> = ({
   name,
-  label,
+  placeholder,
   type = 'text',
   register,
   error,
@@ -37,7 +37,7 @@ export const AuthTextField: React.FC<AuthTextFieldProps> = ({
   const getFieldStyles = () => {
     if (variant === 'signup') {
       return {
-        mb: 2,
+        // mb: 2,
         '& .MuiOutlinedInput-root': {
           backgroundColor: 'rgba(255, 255, 255, 0.05)',
           '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
@@ -57,7 +57,7 @@ export const AuthTextField: React.FC<AuthTextFieldProps> = ({
   const commonProps = {
     ...register(name, validation),
     fullWidth: true,
-    label,
+     placeholder,
     type: isPasswordField ? (showPassword ? 'text' : 'password') : type,
     variant: "outlined" as const,
     error: !!error,

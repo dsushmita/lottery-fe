@@ -56,7 +56,8 @@ export const LeftPanel = styled(Box)(({ theme }) => ({
   justifyContent: 'space-between',
   color: 'white',
   position: 'relative',
-  padding: theme.spacing(2),
+
+  padding: '32px',
   paddingBottom: 0,
   minHeight: 300,
   
@@ -75,7 +76,8 @@ export const LeftPanel = styled(Box)(({ theme }) => ({
 export const RightPanel = styled(Box)(({ theme }) => ({
   // flex: 1,
   backgroundColor: theme.custom?.auth?.rightPanelBg || '#242A3A',
-  padding: theme.spacing(2),
+  // padding: theme.spacing(2),
+  padding: '32px',
   // display: 'flex',
   // flexDirection: 'column',
   // justifyContent: 'center',
@@ -116,11 +118,11 @@ export const LogoContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const StyledTextField = styled(TextField)(({ theme }) => ({
-  marginBottom: theme.spacing(2.5),
+  marginBottom: '10px',
   
   '& .MuiOutlinedInput-root': {
     backgroundColor: theme.custom?.auth?.inputBg || 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 8,
+    borderRadius: 3,
     
     '& fieldset': {
       borderColor: theme.custom?.auth?.inputBorder || 'rgba(255, 255, 255, 0.2)',
@@ -158,7 +160,7 @@ export const StyledTextField = styled(TextField)(({ theme }) => ({
 export const SocialButton = styled(Button)(({ theme }) => ({
   minWidth: 50,
   height: 50,
-  borderRadius: 8,
+  borderRadius: 3,
   backgroundColor: theme.palette.mode === 'dark' 
     ? 'rgba(255, 255, 255, 0.1)' 
     : 'rgba(0, 0, 0, 0.05)',
@@ -189,16 +191,17 @@ export const SocialButton = styled(Button)(({ theme }) => ({
 
 export const PrimaryButton = styled(Button)(({ theme }) => ({
   padding: theme.spacing(1.5, 3),
-  backgroundColor: theme.palette.primary.main,
-  color: 'white',
-  fontWeight: 600,
+  backgroundColor: '#3ABEF9',
+  color: ' #101004',
+  fontWeight: 400,
   textTransform: 'none',
   borderRadius: 8,
   fontSize: '1rem',
+  marginBottom: '24px',
   
-  '&:hover': {
-    backgroundColor: theme.palette.primary.dark,
-  },
+  // '&:hover': {
+  //   backgroundColor: theme.palette.primary.dark,
+  // },
   
   '&:disabled': {
     backgroundColor: theme.palette.mode === 'dark' 
