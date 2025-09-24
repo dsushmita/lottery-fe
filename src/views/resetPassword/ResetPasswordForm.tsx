@@ -1,21 +1,15 @@
 'use client';
 
 import type { FC } from 'react';
-import {
-  Typography,
-  Button,
-  Alert,
-  InputAdornment,
-  Box,
-  IconButton,
-  CircularProgress
-} from '@mui/material';
-import { Lock, Visibility, VisibilityOff, CheckCircle } from '@mui/icons-material';
+import { Alert, Box, Button, CircularProgress } from '@mui/material';
+import { Lock, CheckCircle } from '@mui/icons-material';
 import Link from 'next/link';
 
-import { StyledTextField } from '@/styles/authStyles';
 import { useResetPassword } from '@/hooks/login/useResetPassword';
 import AuthLayout from '@/components/AuthLayout';
+import { AuthTextField } from '@/components/auth/AuthTextField';
+import { AuthHeader } from '@/components/auth/AuthHeader';
+import { PrimaryButton } from '@/styles/authStyles';
 
 const ResetPasswordForm: FC = () => {
   const {
@@ -35,40 +29,52 @@ const ResetPasswordForm: FC = () => {
     goToLogin,
   } = useResetPassword();
 
+  // Success State
   if (success) {
     return (
       <AuthLayout>
         <Box sx={{ textAlign: 'center' }}>
           <CheckCircle sx={{ fontSize: 80, color: '#6366f1', mb: 2 }} />
-          <Typography variant="h4" component="h1" gutterBottom sx={{ color: 'white', fontWeight: 'bold', mb: 2 }}>
-            Password Changed Successfully!
-          </Typography>
-          <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 4 }}>
-            Your password has been changed successfully. You will be redirected to the login page in a few seconds.
-          </Typography>
+          
+          <AuthHeader
+            title="Password Changed Successfully!"
+            variant="reset-password"
+            description="Your password has been changed successfully. You will be redirected to the login page in a few seconds."
+          />
 
-          <Button onClick={goToLogin} variant="contained" size="large" sx={{ backgroundColor: '#6366f1', '&:hover': { backgroundColor: '#5855eb' }, py: 1.5, px: 4 }}>
+          <PrimaryButton 
+            onClick={goToLogin} 
+            variant="contained" 
+            size="large" 
+            sx={{ py: 1.5, px: 4 }}
+          >
             Login Now
-          </Button>
+          </PrimaryButton>
         </Box>
       </AuthLayout>
     );
   }
 
+  // Invalid Token State
   if (!token) {
     return (
       <AuthLayout>
         <Box sx={{ textAlign: 'center' }}>
-          <Typography variant="h4" component="h1" gutterBottom sx={{ color: 'white', fontWeight: 'bold', mb: 2 }}>
-            Invalid Reset Link
-          </Typography>
-          <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.7)', mb: 4 }}>
-            This password reset link is invalid or has expired.
-          </Typography>
+          <AuthHeader
+            title="Invalid Reset Link"
+            variant="reset-password"
+            description="This password reset link is invalid or has expired."
+          />
 
-          <Button component={Link} href="/forgot-password" variant="contained" size="large" sx={{ backgroundColor: '#6366f1', '&:hover': { backgroundColor: '#5855eb' }, py: 1.5, px: 4 }}>
-            Request New Link
-          </Button>
+          <Link href="/forgot-password" passHref>
+            <PrimaryButton 
+              variant="contained" 
+              size="large" 
+              sx={{ py: 1.5, px: 4 }}
+            >
+              Request New Link
+            </PrimaryButton>
+          </Link>
         </Box>
       </AuthLayout>
     );
@@ -76,14 +82,11 @@ const ResetPasswordForm: FC = () => {
 
   return (
     <AuthLayout>
-      <Typography variant="h4" component="h1" gutterBottom sx={{ color: 'white', fontWeight: 'bold', textAlign: 'center', mb: 1 }}>
-        Reset Your Password
-      </Typography>
-
-      <Typography variant="body1" sx={{ color: 'rgba(255, 255, 255, 0.7)', textAlign: 'center', mb: 4 }}>
-        Create a new password for your account.
-      </Typography>
-
+      <AuthHeader
+        title="Reset Your Password"
+        variant="reset-password"
+        description="Create a new password for your account."
+      />
       {error && (
         <Alert severity="error" sx={{ mb: 2 }} onClose={clearError}>
           {error.message}
@@ -91,65 +94,58 @@ const ResetPasswordForm: FC = () => {
       )}
 
       <Box component="form" onSubmit={handleSubmit}>
-        <StyledTextField
-          fullWidth
+        <AuthTextField
+          name="password"
           label="New Password"
-          type={showPassword ? 'text' : 'password'}
-          {...register('password', {
+          type="password"
+          register={register}
+          error={errors.password}
+          disabled={loading}
+          startIcon={<Lock sx={{ color: 'rgba(255, 255, 255, 0.7)' }} />}
+          showPassword={showPassword}
+          onTogglePassword={() => setShowPassword(!showPassword)}
+          validation={{
             required: 'Password is required',
             minLength: { value: 6, message: 'Password must be at least 6 characters' },
-          })}
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Lock sx={{ color: 'rgba(255, 255, 255, 0.7)' }} />
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
           }}
+          variant="reset-password"
         />
-
-        <StyledTextField
-          fullWidth
+        <AuthTextField
+          name="confirmPassword"
           label="Confirm New Password"
-          type={showConfirmPassword ? 'text' : 'password'}
-          {...register('confirmPassword', {
+          type="password"
+          register={register}
+          error={errors.confirmPassword}
+          disabled={loading}
+          startIcon={<Lock sx={{ color: 'rgba(255, 255, 255, 0.7)' }} />}
+          showPassword={showConfirmPassword}
+          onTogglePassword={() => setShowConfirmPassword(!showConfirmPassword)}
+          validation={{
             required: 'Please confirm your password',
-            validate: (value) => value === password || 'Passwords do not match',
-          })}
-          error={!!errors.confirmPassword}
-          helperText={errors.confirmPassword?.message}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Lock sx={{ color: 'rgba(255, 255, 255, 0.7)' }} />
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowConfirmPassword(!showConfirmPassword)} edge="end" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                  {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            ),
+            validate: (value: string) => value === password || 'Passwords do not match',
           }}
+          variant="reset-password"
         />
-
-        <Button type="submit" fullWidth variant="contained" size="large" disabled={loading} sx={{ mb: 2, py: 1.5, backgroundColor: '#6366f1', '&:hover': { backgroundColor: '#5855eb' } }}>
+        <PrimaryButton
+          type="submit"
+          fullWidth
+          disabled={loading}
+          sx={{ mb: 2, py: 1.5 }}
+        >
           {loading ? <CircularProgress size={24} /> : 'Reset Password'}
-        </Button>
-
-        <Button component={Link} href="/login" fullWidth variant="text" sx={{ color: 'rgba(255, 255, 255, 0.7)', '&:hover': { color: 'white' } }}>
-          Back to Login
-        </Button>
+        </PrimaryButton>
+        <Link href="/login" passHref>
+          <Button 
+            fullWidth 
+            variant="text" 
+            sx={{ 
+              color: 'rgba(255, 255, 255, 0.7)', 
+              '&:hover': { color: 'white' } 
+            }}
+          >
+            Back to Login
+          </Button>
+        </Link>
       </Box>
     </AuthLayout>
   );

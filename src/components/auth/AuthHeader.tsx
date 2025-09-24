@@ -7,7 +7,8 @@ interface AuthHeaderProps {
   subtitle?: string;
   linkText?: string;
   linkHref?: string;
-  variant?: "login" | "signup";
+  variant?: "login" | "signup" | "forgot-password" | "reset-password";
+  description?: string;
 }
 
 export const AuthHeader: React.FC<AuthHeaderProps> = ({
@@ -16,77 +17,88 @@ export const AuthHeader: React.FC<AuthHeaderProps> = ({
   linkText,
   linkHref,
   variant = "login",
+  description,
 }) => {
-  const getHeaderStyles = () => {
-    if (variant === "signup") {
-      return {
-        title: {
-          color: "white",
-          fontWeight: "bold",
-          textAlign: "center",
-          mb: 1,
-        },
-        subtitle: {
-          color: "rgba(255, 255, 255, 0.7)",
-          textAlign: "center",
-          display: "flex",
-          flexDirection: "column", // or "row"
-          gap: "10px", // space between children
-        },
-
-        link: {
-          color: "#0ea5e9",
-          textDecoration: "none",
-        },
-      };
-    }
-
-    return {
-      title: {
-        mb: 1,
-        fontWeight: 600,
-        color: "text.primary",
-      },
-      subtitle: {
-        color: "text.secondary",
-      },
-      link: {
-        color: "primary.main",
-        textDecoration: "none",
-        fontWeight: 500,
-        "&:hover": { textDecoration: "underline" },
-      },
-    };
+  // Base styles 
+  const baseStyles = {
+    title: {
+      fontSize: "24px",
+      fontWeight: "bold",
+      textAlign: "center",
+      mb: 1,
+    },
+    description: {
+      textAlign: "center",
+      lineHeight: 1.6,
+    },
+    subtitle: {
+      textAlign: "center",
+    },
+    link: {
+      textDecoration: "none",
+      fontWeight: 500,
+      "&:hover": { textDecoration: "underline" },
+    },
+  };
+  const variantOverrides = {
+    login: {
+      title: { color: "text.primary" },
+      description: { color: "text.secondary" },
+      subtitle: { color: "text.secondary" },
+      link: { color: "primary.main" },
+    },
+    signup: {
+      title: { color: "white" },
+      description: { color: "rgba(255, 255, 255, 0.7)" },
+      subtitle: { color: "rgba(255, 255, 255, 0.7)" },
+      link: { color: "#0ea5e9" },
+    },
+    "forgot-password": {
+      title: { color: "white", fontWeight: 600, mb: description ? 2 : 3 },
+      description: { color: "rgba(255, 255, 255, 0.7)" },
+      subtitle: { color: "rgba(255, 255, 255, 0.7)" },
+      link: { color: "#6366f1" },
+    },
+    "reset-password": {
+      title: { color: "white", mb: description ? 1 : 2 },
+      description: { color: "rgba(255, 255, 255, 0.7)", mb: 4 },
+      subtitle: { color: "rgba(255, 255, 255, 0.7)" },
+      link: { color: "#6366f1" },
+    },
   };
 
-  const styles = getHeaderStyles();
+  const styles = {
+    title: { ...baseStyles.title, ...variantOverrides[variant].title },
+    description: { ...baseStyles.description, ...variantOverrides[variant].description },
+    subtitle: { ...baseStyles.subtitle, ...variantOverrides[variant].subtitle },
+    link: { ...baseStyles.link, ...variantOverrides[variant].link },
+  };
+
+  const isPasswordReset = variant === "reset-password";
+  const isSignup = variant === "signup";
 
   return (
-    <>
+    <Box sx={{ mb: 4 }}>
       <Typography
-        variant="h2"
-        sx={{
-          fontSize: "24px",
-          fontWeight: "bold",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          pb: "10px",
-        }}
+        variant="h4"
+        component={isPasswordReset ? "h1" : "div"}
+        sx={styles.title}
       >
         {title}
       </Typography>
-
+      {description && (
+        <Typography variant="body1" sx={styles.description}>
+          {description}
+        </Typography>
+      )}
       {(subtitle || linkText) && (
         <Box
           sx={{
-            pb: "32px",
             display: "flex",
             justifyContent: "center",
-
             alignItems: "center",
-            gap: 1,
-            ...(variant === "signup" && { justifyContent: "center" }),
+            gap: isSignup ? "10px" : 1,
+            flexDirection: isSignup ? "column" : "row",
           }}
         >
           {subtitle && (
@@ -107,6 +119,6 @@ export const AuthHeader: React.FC<AuthHeaderProps> = ({
           )}
         </Box>
       )}
-    </>
+    </Box>
   );
 };

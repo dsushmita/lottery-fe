@@ -1,9 +1,11 @@
 'use client';
-import { Typography, Button, Alert, Box } from '@mui/material';
+import { Alert, Box, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useForgotPassword } from '@/hooks/login/useForgotPassword';
 import AuthLayout from '@/components/AuthLayout';
-import { StyledTextField } from '@/styles/authStyles';
+import { PrimaryButton } from '@/styles/authStyles';
+import { AuthTextField } from '@/components/auth/AuthTextField';
+import { AuthHeader } from '@/components/auth/AuthHeader';
 
 export default function ForgotPasswordForm() {
   const {
@@ -16,7 +18,6 @@ export default function ForgotPasswordForm() {
     resendEmail,
     clearError,
   } = useForgotPassword();
-
   if (emailSent) {
     return (
       <AuthLayout>
@@ -36,23 +37,19 @@ export default function ForgotPasswordForm() {
           >
             <Typography sx={{ fontSize: '2rem', color: 'white' }}>✓</Typography>
           </Box>
-
-          <Typography variant="h4" sx={{ mb: 2, fontWeight: 600, color: 'white' }}>
-            Email Sent!
-          </Typography>
-
-          <Typography variant="body1" sx={{ mb: 4, color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.6 }}>
-            Check your email and open the link to continue. The email may take a few minutes to arrive.
-          </Typography>
-
-          <Button
+          <AuthHeader
+            title="Email Sent!"
+            variant="forgot-password"
+            description="Check your email and open the link to continue. The email may take a few minutes to arrive."
+          />
+          <PrimaryButton
             onClick={resendEmail}
             disabled={loading}
             variant="outlined"
             sx={{ 
-              mb: 2, 
-              color: '#6366f1',
+              mb: 2,
               borderColor: '#6366f1',
+              color: '#6366f1',
               '&:hover': {
                 borderColor: '#5855eb',
                 bgcolor: 'rgba(99, 102, 241, 0.1)'
@@ -60,8 +57,7 @@ export default function ForgotPasswordForm() {
             }}
           >
             {loading ? 'Sending...' : 'Resend Email'}
-          </Button>
-
+          </PrimaryButton>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'center' }}>
             <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
               Don't have an account yet?
@@ -87,71 +83,41 @@ export default function ForgotPasswordForm() {
 
   return (
     <AuthLayout>
-      <Typography variant="h4" sx={{ mb: 2, fontWeight: 600, color: 'white' }}>
-        Forgot Password?
-      </Typography>
-
-      <Typography variant="body1" sx={{ mb: 4, color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.6 }}>
-        Enter your email and we'll send you a link to reset your password.
-      </Typography>
-
+      <AuthHeader
+        title="Forgot Password?"
+        variant="forgot-password"
+        description="Enter your email and we'll send you a link to reset your password."
+      />
       {error && (
-        <Alert 
-          severity="error" 
-          sx={{ mb: 3 }} 
-          onClose={clearError}
-          action={
-            <Button 
-              color="inherit" 
-              size="small" 
-              onClick={clearError}
-              sx={{ color: 'white' }}
-            >
-              ✕
-            </Button>
-          }
-        >
+        <Alert severity="error" sx={{ mb: 2 }} onClose={clearError}>
           {error.message}
         </Alert>
       )}
-
       <form onSubmit={handleSubmit}>
-        <StyledTextField
-          {...register('email', {
+        <AuthTextField
+          name="email"
+          placeholder="example@domain.com"
+          label="Enter your email address"
+          register={register}
+          error={errors.email}
+          disabled={loading}
+          validation={{
             required: 'Email is required',
             pattern: {
               value: /^\S+@\S+$/i,
               message: 'Please enter a valid email',
             },
-          })}
-          fullWidth
-          label="Enter your email address"
-          placeholder="example@domain.com"
-          variant="outlined"
-          error={!!errors.email}
-          helperText={errors.email?.message}
-          disabled={loading}
-          sx={{ mb: 3 }}
+          }}
+          variant="forgot-password"
         />
-
-        <Button
+        <PrimaryButton
           type="submit"
           fullWidth
-          variant="contained"
           disabled={loading}
-          sx={{
-            py: 1.5,
-            mb: 3,
-            bgcolor: '#6366f1',
-            '&:hover': { bgcolor: '#5855eb' },
-            '&:disabled': { bgcolor: 'rgba(255, 255, 255, 0.1)' },
-            textTransform: 'none',
-            fontWeight: 600,
-            borderRadius: 2,
-          }}
+          sx={{ mb: 3 }}
         >
           {loading ? 'Sending Reset Link...' : 'Send Reset Link'}
-        </Button>
+        </PrimaryButton>
       </form>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'center' }}>

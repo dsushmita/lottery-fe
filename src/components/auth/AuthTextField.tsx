@@ -5,17 +5,18 @@ import { StyledTextField } from '@/styles/authStyles';
 
 interface AuthTextFieldProps {
   name: string;
-placeholder: string;           
+  placeholder?: string;           
   type?: string;
-  register: any; // Keep it flexible to work with your existing forms
+  register: any;
   error?: any;
   disabled?: boolean;
   startIcon?: React.ReactNode;
   showPassword?: boolean;
   onTogglePassword?: () => void;
   validation?: object;
-  variant?: 'login' | 'signup';
-  [key: string]: any; // Allow other props to pass through
+  variant?: 'login' | 'signup' | 'forgot-password' | 'reset-password';
+  label?: string;
+  [key: string]: any;
 }
 
 export const AuthTextField: React.FC<AuthTextFieldProps> = ({
@@ -30,6 +31,7 @@ export const AuthTextField: React.FC<AuthTextFieldProps> = ({
   onTogglePassword,
   validation = {},
   variant = 'login',
+  label,
   ...otherProps
 }) => {
   const isPasswordField = type === 'password' || (type === 'text' && onTogglePassword);
@@ -37,7 +39,6 @@ export const AuthTextField: React.FC<AuthTextFieldProps> = ({
   const getFieldStyles = () => {
     if (variant === 'signup') {
       return {
-        // mb: 2,
         marginBottom: "10px",
         '& .MuiOutlinedInput-root': {
           backgroundColor: 'rgba(255, 255, 255, 0.05)',
@@ -52,13 +53,42 @@ export const AuthTextField: React.FC<AuthTextFieldProps> = ({
         },
       };
     }
-    return {}; // Use StyledTextField for login
+    
+    if (variant === 'forgot-password' || variant === 'reset-password') {
+      return {
+        mb: 3,
+        '& .MuiOutlinedInput-root': {
+          backgroundColor: 'rgba(255, 255, 255, 0.05)',
+          borderRadius: 2,
+          '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+          '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
+          '&.Mui-focused fieldset': { borderColor: '#6366f1' },
+          '& input': { 
+            color: 'white',
+            '&::placeholder': {
+              color: 'rgba(255, 255, 255, 0.5)',
+              opacity: 1,
+            },
+          },
+        },
+        '& .MuiInputLabel-root': {
+          color: 'rgba(255, 255, 255, 0.7)',
+          '&.Mui-focused': { color: '#6366f1' },
+        },
+        '& .MuiFormHelperText-root': {
+          color: error ? '#f87171' : 'rgba(255, 255, 255, 0.6)',
+        },
+      };
+    }
+    
+    return {};
   };
 
   const commonProps = {
     ...register(name, validation),
     fullWidth: true,
-     placeholder,
+    label,
+    placeholder,
     type: isPasswordField ? (showPassword ? 'text' : 'password') : type,
     variant: "outlined" as const,
     error: !!error,
@@ -76,7 +106,7 @@ export const AuthTextField: React.FC<AuthTextFieldProps> = ({
             onClick={onTogglePassword}
             edge="end"
             sx={{ 
-              color: variant === 'signup' ? 'rgba(255, 255, 255, 0.7)' : 'text.secondary' 
+              color: variant === 'login' ? 'text.secondary' : 'rgba(255, 255, 255, 0.7)'
             }}
             disabled={disabled}
           >
@@ -88,7 +118,7 @@ export const AuthTextField: React.FC<AuthTextFieldProps> = ({
     ...otherProps
   };
 
-  if (variant === 'signup') {
+  if (variant === 'signup' || variant === 'forgot-password' || variant === 'reset-password') {
     return (
       <TextField
         {...commonProps}
@@ -97,6 +127,5 @@ export const AuthTextField: React.FC<AuthTextFieldProps> = ({
     );
   }
 
-  // Use StyledTextField for login
   return <StyledTextField {...commonProps} />;
 };
