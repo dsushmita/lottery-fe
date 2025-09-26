@@ -42,7 +42,7 @@ export const useSignup = () => {
     }
   };
 
-  const signupWithProvider = async (provider: 'google' | 'twitter' | 'discord') => {
+  const signupWithProvider = async (provider: 'google' | 'steam' ) => {
     setLoading(true);
     setError(null);
 

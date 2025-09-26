@@ -39,7 +39,7 @@ export const lightTheme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#6366f1',
+      main: '#3ABEF9',
       light: '#818cf8',
       dark: '#4f46e5',
     },
@@ -54,11 +54,11 @@ export const lightTheme = createTheme({
   },
   custom: {
     auth: {
-      leftPanelBg: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+      leftPanelBg: 'linear-gradient(135deg, #3ABEF9 0%, #4f46e5 100%)',
       rightPanelBg: '#ffffff',
       inputBg: '#f1f5f9',
       inputBorder: '#e2e8f0',
-      primaryButton: '#6366f1',
+      primaryButton: '#3ABEF9',
     },
   },
 });
@@ -68,7 +68,7 @@ export const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#6366f1',
+      main: '#3ABEF9',
       light: '#818cf8',
       dark: '#4f46e5',
     },
@@ -83,11 +83,11 @@ export const darkTheme = createTheme({
   },
   custom: {
     auth: {
-      leftPanelBg: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
-      rightPanelBg: '#242A3A',
+      leftPanelBg: 'linear-gradient(135deg, #3ABEF9 0%, #4f46e5 100%)',
+      rightPanelBg: '#1A1F29',
       inputBg: 'rgba(255, 255, 255, 0.05)',
       inputBorder: 'rgba(255, 255, 255, 0.2)',
-      primaryButton: '#6366f1',
+      primaryButton: '#3ABEF9',
     },
   },
 });

@@ -9,6 +9,12 @@ import {
 } from "@/types/auth/auth";
 import { httpClient } from "../lib/httpClient";
 
+interface APIResponse<T> {
+  success: boolean;
+  statusCode?: number;
+  message?: string;
+  data: T;
+}
 class AuthService {
   private readonly TOKEN_KEY = "auth_token";
   private readonly REFRESH_TOKEN_KEY = "refresh_token";
@@ -103,12 +109,12 @@ class AuthService {
 
   // Reset password
   async resetPassword(
-    data: Omit<ResetPasswordData, "confirmPassword">
+    data: Omit<ResetPasswordData, "confirmPassword">,
   ): Promise<void> {
     await httpClient.post("/auth/reset-password", {
       password: data.password,
       token: data.token,
-      userId: data.userId
+      userId: data.userId,
     });
   }
 
@@ -150,12 +156,12 @@ class AuthService {
 
   // Signup
   async signup(
-    credentials: Omit<SignupFormData, "confirmPassword">
+    credentials: Omit<SignupFormData, "confirmPassword">,
   ): Promise<SignupResponse> {
     try {
       const data = await httpClient.post<SignupResponse>(
         "/auth/register",
-        credentials
+        credentials,
       );
 
       if (data.success && data.token && data.user) {
@@ -168,7 +174,6 @@ class AuthService {
       throw new Error(error instanceof Error ? error.message : "Signup failed");
     }
   }
-
 
   async loginWithGoogle(idToken: string): Promise<LoginResponse> {
     try {
@@ -183,10 +188,43 @@ class AuthService {
 
       return data;
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : "Google login failed");
+      throw new Error(
+        error instanceof Error ? error.message : "Google login failed",
+      );
+    }
+  }
+ // Steam Login
+  async getSteamLoginUrl(): Promise<string> {
+    try {
+      const response = await httpClient.get<APIResponse<string>>("/auth/steam-login-url");
+      if (response.success) {
+        return response.data;
+      }
+      throw new Error(response.message || "Failed to get Steam login URL");
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : "Failed to get Steam login URL");
+    }
+  }
+
+  async loginWithSteam(params: URLSearchParams): Promise<LoginResponse> {
+    try {
+      const response = await httpClient.get<LoginResponse>("/auth/steam/callback", { params } as any);
+      if (response.success && response.token && response.user) {
+        this.setToken(response.token);
+        this.setUser({
+          id: response.user.id,
+          email: response.user.email,
+          name: response.user.name,
+         // Optional field
+        });
+      } else {
+        throw new Error(response.message || "Steam login failed");
+      }
+      return response;
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : "Steam login failed");
     }
   }
 }
-
 
 export const authService = new AuthService();

@@ -15,7 +15,7 @@ console.log('Rendering ResetPassword component');
         height: '100vh',
         backgroundColor: '#242A3A'
       }}>
-        <CircularProgress sx={{ color: '#6366f1' }} />
+        <CircularProgress sx={{ color: '#3ABEF9' }} />
       </Box>
     }>
       <ResetPasswordForm />

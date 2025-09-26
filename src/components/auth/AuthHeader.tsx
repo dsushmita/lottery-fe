@@ -57,13 +57,13 @@ export const AuthHeader: React.FC<AuthHeaderProps> = ({
       title: { color: "white", fontWeight: 600, mb: description ? 2 : 3 },
       description: { color: "rgba(255, 255, 255, 0.7)" },
       subtitle: { color: "rgba(255, 255, 255, 0.7)" },
-      link: { color: "#6366f1" },
+      link: { color: "#3ABEF9" },
     },
     "reset-password": {
       title: { color: "white", mb: description ? 1 : 2 },
       description: { color: "rgba(255, 255, 255, 0.7)", mb: 4 },
       subtitle: { color: "rgba(255, 255, 255, 0.7)" },
-      link: { color: "#6366f1" },
+      link: { color: "#3ABEF9" },
     },
   };
 
@@ -98,7 +98,7 @@ export const AuthHeader: React.FC<AuthHeaderProps> = ({
             justifyContent: "center",
             alignItems: "center",
             gap: isSignup ? "10px" : 1,
-            flexDirection: isSignup ? "column" : "row",
+            // flexDirection: isSignup ? "column" : "row",
           }}
         >
           {subtitle && (

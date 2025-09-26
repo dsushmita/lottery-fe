@@ -62,7 +62,7 @@ export const AuthTextField: React.FC<AuthTextFieldProps> = ({
           borderRadius: 2,
           '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
           '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
-          '&.Mui-focused fieldset': { borderColor: '#6366f1' },
+          '&.Mui-focused fieldset': { borderColor: '#3ABEF9' },
           '& input': { 
             color: 'white',
             '&::placeholder': {
@@ -73,7 +73,7 @@ export const AuthTextField: React.FC<AuthTextFieldProps> = ({
         },
         '& .MuiInputLabel-root': {
           color: 'rgba(255, 255, 255, 0.7)',
-          '&.Mui-focused': { color: '#6366f1' },
+          '&.Mui-focused': { color: '#3ABEF9' },
         },
         '& .MuiFormHelperText-root': {
           color: error ? '#f87171' : 'rgba(255, 255, 255, 0.6)',

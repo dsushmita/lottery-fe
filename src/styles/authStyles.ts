@@ -75,7 +75,8 @@ export const LeftPanel = styled(Box)(({ theme }) => ({
 
 export const RightPanel = styled(Box)(({ theme }) => ({
   // flex: 1,
-  backgroundColor: theme.custom?.auth?.rightPanelBg || '#242A3A',
+  backgroundColor: theme.custom?.auth?.rightPanelBg || '#1A1F29',
+
   // padding: theme.spacing(2),
   padding: '32px',
   // display: 'flex',
@@ -122,8 +123,8 @@ export const StyledTextField = styled(TextField)(({ theme }) => ({
   
   '& .MuiOutlinedInput-root': {
     backgroundColor: theme.custom?.auth?.inputBg || 'rgba(255, 255, 255, 0.05)',
-    borderRadius: 3,
-    
+    borderRadius: '8px',
+
     '& fieldset': {
       borderColor: theme.custom?.auth?.inputBorder || 'rgba(255, 255, 255, 0.2)',
     },

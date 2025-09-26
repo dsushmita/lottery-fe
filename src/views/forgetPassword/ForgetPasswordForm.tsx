@@ -48,8 +48,8 @@ export default function ForgotPasswordForm() {
             variant="outlined"
             sx={{ 
               mb: 2,
-              borderColor: '#6366f1',
-              color: '#6366f1',
+              borderColor: '#3ABEF9',
+              color: '#3ABEF9',
               '&:hover': {
                 borderColor: '#5855eb',
                 bgcolor: 'rgba(99, 102, 241, 0.1)'
@@ -67,7 +67,7 @@ export default function ForgotPasswordForm() {
               href="/register"
               variant="body2"
               sx={{
-                color: '#6366f1',
+                color: '#3ABEF9',
                 textDecoration: 'none',
                 fontWeight: 500,
                 '&:hover': { textDecoration: 'underline' },
@@ -129,7 +129,7 @@ export default function ForgotPasswordForm() {
           href="/login"
           variant="body2"
           sx={{
-            color: '#6366f1',
+            color: '#3ABEF9',
             textDecoration: 'none',
             fontWeight: 500,
             '&:hover': { textDecoration: 'underline' },

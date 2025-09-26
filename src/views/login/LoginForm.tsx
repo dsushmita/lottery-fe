@@ -15,7 +15,6 @@ import { AuthTextField } from '@/components/auth/AuthTextField';
 import { AuthHeader } from '@/components/auth/AuthHeader';
 import { SocialLoginSection } from '@/components/auth/SocialLoginButtons';
 
-
 export default function LoginForm() {
   const { 
     login, 
@@ -46,9 +45,9 @@ export default function LoginForm() {
     login(data);
   };
 
-  const handleSocialLogin = (provider: 'twitter' | 'discord' | 'google') => {
+  const handleSocialLogin = (provider: 'google' | 'steam' | 'discord') => {
     clearError();
-    loginWithProvider(provider as 'twitter' | 'discord');
+    loginWithProvider(provider);
   };
 
   return ( 
@@ -123,7 +122,7 @@ export default function LoginForm() {
 
           <Typography
             component={Link}
-            href="/forget-password"
+            href="/forgot-password"
             variant="body2"
             sx={{
               color: 'text.secondary',
@@ -150,10 +149,9 @@ export default function LoginForm() {
         disabled={loading}
         variant="login"
         showGoogle={true}
-        showTwitter={true}
+        showSteam={true}
         showDiscord={true}
       />
     </AuthLayout>
   ); 
 }
-

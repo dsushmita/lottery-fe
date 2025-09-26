@@ -34,7 +34,7 @@ const ResetPasswordForm: FC = () => {
     return (
       <AuthLayout>
         <Box sx={{ textAlign: 'center' }}>
-          <CheckCircle sx={{ fontSize: 80, color: '#6366f1', mb: 2 }} />
+          <CheckCircle sx={{ fontSize: 80, color: '#3ABEF9', mb: 2 }} />
           
           <AuthHeader
             title="Password Changed Successfully!"

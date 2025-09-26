@@ -57,7 +57,7 @@ const SignupForm: React.FC = () => {
     await signup(data);
   };
 
-  const handleSocialLogin = (provider: "google" | "twitter" | "discord") => {
+  const handleSocialLogin = (provider: "google" | "steam" ) => {
     clearError();
     signupWithProvider(provider);
   };
@@ -213,8 +213,8 @@ const SignupForm: React.FC = () => {
           disabled={loading}
           variant="login"
           showGoogle={true}
-          showTwitter={true}
-          showDiscord={true}
+          // showTwitter={true}
+          // showDiscord={true}
         />
       </Box>
     </AuthLayout>
