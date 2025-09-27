@@ -45,56 +45,56 @@ export const FormContainer = styled(Paper)(({ theme }) => ({
 }));
 
 export const LeftPanel = styled(Box)(({ theme }) => ({
-  flex: 1,
-  // backgroundImage: `url(${leftSideImage.src})`,
-  // backgroundSize: 'cover',
-  // backgroundPosition: 'center',
-  backgroundColor: '#0B0F14',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  color: 'white',
-  position: 'relative',
+  width: "350px",
+  backgroundColor: "#0B0F14",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "space-between",
+  color: "white",
+  position: "relative",
 
-  padding: '32px',
+  padding: "32px",
   paddingBottom: 0,
   minHeight: 300,
-  
-  [theme.breakpoints.down('md')]: {
-    flex: '0 0 auto',
+
+  [theme.breakpoints.down("md")]: {
+    width: "100%", // full width on tablets and below
     minHeight: 200,
     padding: theme.spacing(4, 2),
   },
-  
-  [theme.breakpoints.down('sm')]: {
+
+  [theme.breakpoints.down("sm")]: {
     minHeight: 150,
     padding: theme.spacing(3, 2),
   },
 }));
 
-export const RightPanel = styled(Box)(({ theme }) => ({
-  // flex: 1,
-  backgroundColor: theme.custom?.auth?.rightPanelBg || '#1A1F29',
 
-  // padding: theme.spacing(2),
-  padding: '32px',
-  // display: 'flex',
-  // flexDirection: 'column',
-  // justifyContent: 'center',
-  
-  [theme.breakpoints.down('md')]: {
-    flex: 1,
+export const RightPanel = styled(Box)(({ theme }) => ({
+  width: "500px",
+  maxWidth: "100%",
+  backgroundColor: theme.custom?.auth?.rightPanelBg || "#1A1F29",
+
+  padding: "32px",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+
+  [theme.breakpoints.down("md")]: {
+    width: "100%", // full width on tablets and below
     padding: theme.spacing(4, 3),
-    justifyContent: 'flex-start',
+    justifyContent: "flex-start",
     paddingTop: theme.spacing(4),
   },
-  
-  [theme.breakpoints.down('sm')]: {
+
+  [theme.breakpoints.down("sm")]: {
+    width: "100%",
     padding: theme.spacing(3, 2),
     paddingTop: theme.spacing(4),
   },
 }));
+
 
 export const LogoContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
