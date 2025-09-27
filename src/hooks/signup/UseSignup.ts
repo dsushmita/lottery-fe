@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AuthError } from '@/types/auth/auth';
 import { authService } from '@/services/authService';
+import { useAuth } from '@/context/AuthContext';
 
 interface SignupFormData {
   userName: string;
@@ -16,6 +17,8 @@ export const useSignup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
+  const { setUser } = useAuth();
+  
 
   const signup = async (formData: SignupFormData) => {
     setLoading(true);
@@ -27,12 +30,13 @@ export const useSignup = () => {
         email: formData.email,
         password: formData.password,
       });
-      
-      if (response.token) {
-        router.push('/dashboard');
-      } else {
-        setError({ message: 'Signup failed' });
-      }
+       // Update auth context with user data
+        if (response.user) {
+          setUser(response.user);
+        }
+
+        router.push('/signup-sucess');
+
     } catch (err) {
       setError({ 
         message: err instanceof Error ? err.message : 'An unexpected error occurred' 

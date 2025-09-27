@@ -122,7 +122,7 @@ export default function ForgotPasswordForm() {
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'center' }}>
         <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-          Remember your password?
+    Don’t have an account yet? 
         </Typography>
         <Typography
           component={Link}
@@ -135,7 +135,7 @@ export default function ForgotPasswordForm() {
             '&:hover': { textDecoration: 'underline' },
           }}
         >
-          Back to Login
+          Create Account
         </Typography>
       </Box>
     </AuthLayout>

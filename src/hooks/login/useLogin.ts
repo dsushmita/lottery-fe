@@ -21,7 +21,7 @@ export const useLogin = () => {
 
       if (response.success && response.user) {
         router.push("/dashboard");
-        //  setUser(response.user);
+         setUser(response.user);
       } else {
         setError({ message: response.message || "Login failed" });
       }

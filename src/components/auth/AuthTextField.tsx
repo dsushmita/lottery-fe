@@ -37,49 +37,9 @@ export const AuthTextField: React.FC<AuthTextFieldProps> = ({
   const isPasswordField = type === 'password' || (type === 'text' && onTogglePassword);
   
   const getFieldStyles = () => {
-    if (variant === 'signup') {
-      return {
-        marginBottom: "10px",
-        '& .MuiOutlinedInput-root': {
-          backgroundColor: 'rgba(255, 255, 255, 0.05)',
-          '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
-          '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
-          '&.Mui-focused fieldset': { borderColor: '#0ea5e9' },
-          '& input': { color: 'white' },
-        },
-        '& .MuiInputLabel-root': {
-          color: 'rgba(255, 255, 255, 0.7)',
-          '&.Mui-focused': { color: '#0ea5e9' },
-        },
-      };
-    }
     
-    if (variant === 'forgot-password' || variant === 'reset-password') {
-      return {
-        mb: 3,
-        '& .MuiOutlinedInput-root': {
-          backgroundColor: 'rgba(255, 255, 255, 0.05)',
-          borderRadius: 2,
-          '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
-          '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.3)' },
-          '&.Mui-focused fieldset': { borderColor: '#3ABEF9' },
-          '& input': { 
-            color: 'white',
-            '&::placeholder': {
-              color: 'rgba(255, 255, 255, 0.5)',
-              opacity: 1,
-            },
-          },
-        },
-        '& .MuiInputLabel-root': {
-          color: 'rgba(255, 255, 255, 0.7)',
-          '&.Mui-focused': { color: '#3ABEF9' },
-        },
-        '& .MuiFormHelperText-root': {
-          color: error ? '#f87171' : 'rgba(255, 255, 255, 0.6)',
-        },
-      };
-    }
+    
+    
     
     return {};
   };
@@ -119,12 +79,7 @@ export const AuthTextField: React.FC<AuthTextFieldProps> = ({
   };
 
   if (variant === 'signup' || variant === 'forgot-password' || variant === 'reset-password') {
-    return (
-      <TextField
-        {...commonProps}
-        sx={getFieldStyles()}
-      />
-    );
+    return <StyledTextField {...commonProps} />;
   }
 
   return <StyledTextField {...commonProps} />;

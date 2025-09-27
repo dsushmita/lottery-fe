@@ -13,19 +13,38 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
   const router = useRouter();
   const pathname = usePathname();
 
+  // Routes that don't require authentication
   const publicRoutes = ['/login', '/register', '/forget-password', '/reset-password'];
+  
+  // Routes that require authentication but are not redirected to dashboard
+  const authRoutes = ['/signup-success', '/verify-email', '/welcome'];
+  
+  // Routes that should redirect to dashboard if user is already authenticated
+  const redirectToLoginRoutes = ['/login', '/register'];
+  
   const isPublicRoute = publicRoutes.includes(pathname);
+  const isAuthRoute = authRoutes.includes(pathname);
+  const shouldRedirectToDashboard = redirectToLoginRoutes.includes(pathname);
 
   useEffect(() => {
     if (!isLoading) {
-      if (!isAuthenticated && !isPublicRoute) {
+      // If not authenticated and trying to access protected content
+      if (!isAuthenticated && !isPublicRoute && !isAuthRoute) {
+        console.log('Redirecting unauthenticated user to login from:', pathname);
         router.replace('/login');
-      }  else if (isAuthenticated && isPublicRoute) {
+        return;
+      }
+      
+      // If authenticated and on login/register pages, redirect to dashboard
+      if (isAuthenticated && shouldRedirectToDashboard) {
+        console.log('Redirecting authenticated user to dashboard from:', pathname);
         router.replace('/dashboard');
+        return;
       }
     }
-  }, [isAuthenticated, isLoading, isPublicRoute, pathname, router]);
+  }, [isAuthenticated, isLoading, isPublicRoute, isAuthRoute, shouldRedirectToDashboard, pathname, router]);
 
+  // Show loading spinner while checking authentication
   if (isLoading) {
     return (
       <Box sx={{ 
@@ -40,18 +59,34 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
     );
   }
 
-  // Show auth pages if not authenticated and on public route
-  if (!isAuthenticated && isPublicRoute) {
+  // Allow access to public routes regardless of auth status
+  if (isPublicRoute) {
     return <>{children}</>;
   }
 
-  // Show protected content if authenticated and not on auth pages
-  if (isAuthenticated && !isPublicRoute) {
+  // Allow access to auth-specific routes only if authenticated
+  if (isAuthRoute && isAuthenticated) {
     return <>{children}</>;
   }
 
-  // Don't render anything while redirecting
-  return null;
+  // Allow access to protected routes only if authenticated
+  if (isAuthenticated) {
+    return <>{children}</>;
+  }
+
+  // If we get here, user is not authenticated and trying to access protected content
+  // The useEffect will handle the redirect, so show loading
+  return (
+    <Box sx={{ 
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center', 
+      minHeight: '100vh',
+      bgcolor: 'background.default' 
+    }}>
+      <CircularProgress />
+    </Box>
+  );
 };
 
 export default AuthGuard;
