@@ -9,6 +9,7 @@ interface RequestConfig {
   headers?: Record<string, string>;
   body?: any;
   timeout?: number;
+  params?: Record<string, string | number | boolean> | URLSearchParams;
 }
 
 class HttpClient {
@@ -27,13 +28,38 @@ class HttpClient {
 
   private getAuthToken(): string | null {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('authToken');
+      return localStorage.getItem('auth_token');
     }
     return null;
   }
 
-  private async makeRequest<T>(endpoint: string, config: RequestConfig = {}): Promise<T> {
+  private buildURL(endpoint: string, params?: Record<string, string | number | boolean> | URLSearchParams): string {
     const url = `${this.baseURL}${endpoint}`;
+    
+    if (!params) {
+      return url;
+    }
+
+    // Handle URLSearchParams
+    if (params instanceof URLSearchParams) {
+      const queryString = params.toString();
+      return queryString ? `${url}?${queryString}` : url;
+    }
+
+    // Handle plain object
+    const searchParams = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
+        searchParams.append(key, String(value));
+      }
+    });
+
+    const queryString = searchParams.toString();
+    return queryString ? `${url}?${queryString}` : url;
+  }
+
+  private async makeRequest<T>(endpoint: string, config: RequestConfig = {}): Promise<T> {
+    const url = this.buildURL(endpoint, config.params);
     const token = this.getAuthToken();
 
     const headers = {

@@ -15,6 +15,7 @@ interface APIResponse<T> {
   message?: string;
   data: T;
 }
+
 class AuthService {
   private readonly TOKEN_KEY = "auth_token";
   private readonly REFRESH_TOKEN_KEY = "refresh_token";
@@ -82,6 +83,7 @@ class AuthService {
       throw new Error(error instanceof Error ? error.message : "Login failed");
     }
   }
+
   async loginWithTwitter(): Promise<LoginResponse> {
     return httpClient.post<LoginResponse>("/auth/twitter");
   }
@@ -178,7 +180,7 @@ class AuthService {
   async loginWithGoogle(idToken: string): Promise<LoginResponse> {
     try {
       const data = await httpClient.post<LoginResponse>("/auth/google-login", {
-        idToken, // backend expects this field
+        idToken,
       });
 
       if (data.success && data.token && data.user) {
@@ -193,36 +195,41 @@ class AuthService {
       );
     }
   }
- // Steam Login
+
+  // Steam Login
   async getSteamLoginUrl(): Promise<string> {
     try {
       const response = await httpClient.get<APIResponse<string>>("/auth/steam-login-url");
-      if (response.success) {
+      if (response.success && response.data) {
         return response.data;
       }
       throw new Error(response.message || "Failed to get Steam login URL");
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : "Failed to get Steam login URL");
+      throw new Error(
+        error instanceof Error ? error.message : "Failed to get Steam login URL"
+      );
     }
   }
 
   async loginWithSteam(params: URLSearchParams): Promise<LoginResponse> {
     try {
-      const response = await httpClient.get<LoginResponse>("/auth/steam/callback", { params } as any);
+      // Pass URLSearchParams directly to httpClient
+      const response = await httpClient.get<LoginResponse>(
+        "/auth/steam/callback",
+        { params }
+      );
+
       if (response.success && response.token && response.user) {
         this.setToken(response.token);
-        this.setUser({
-          id: response.user.id,
-          email: response.user.email,
-          name: response.user.name,
-         // Optional field
-        });
+        this.setUser(response.user);
+        return response;
       } else {
         throw new Error(response.message || "Steam login failed");
       }
-      return response;
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : "Steam login failed");
+      throw new Error(
+        error instanceof Error ? error.message : "Steam login failed"
+      );
     }
   }
 }
