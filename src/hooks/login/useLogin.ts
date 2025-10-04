@@ -19,9 +19,7 @@ export const useLogin = () => {
 
     try {
       const response = await authService.login(formData);
-      console.log("response", response);
-
-      if (response.success && response.user) {
+      if (response.user) {
         setUser(response.user);
         router.push("/dashboard");
       } else {
@@ -66,22 +64,6 @@ export const useLogin = () => {
           }
           // Don't set loading to false here - let the page redirect
           return;
-
-        case "google":
-          setLoading(true);
-          // You'll need to implement proper Google OAuth flow
-          // This is a placeholder - replace with actual Google OAuth implementation
-          const googleResponse = await authService.loginWithGoogle("");
-          if (googleResponse.success && googleResponse.user) {
-            setUser(googleResponse.user);
-            router.push("/dashboard");
-          } else {
-            setError({
-              message: googleResponse.message || "Google login failed",
-            });
-          }
-          setLoading(false);
-          break;
 
         default:
           throw new Error("Unsupported provider");

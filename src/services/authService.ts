@@ -67,21 +67,20 @@ class AuthService {
 
   // Login
   async login(credentials: LoginFormData): Promise<LoginResponse> {
-    try {
-      const data = await httpClient.post<LoginResponse>("/auth/login", {
-        email: credentials.email,
-        password: credentials.password,
-      });
+    const data = await httpClient.post<{
+      data: LoginResponse;
+      success: boolean;
+    }>("/auth/login", {
+      email: credentials.email,
+      password: credentials.password,
+    });
 
-      if (data.success && data.token && data.user) {
-        this.setToken(data.token);
-        this.setUser(data.user);
-      }
-
-      return data;
-    } catch (error) {
-      throw new Error(error instanceof Error ? error.message : "Login failed");
+    if (data.success && data?.data?.token && data.data.user) {
+      this.setToken(data.data.token);
+      this.setUser(data.data.user);
     }
+
+    return data.data;
   }
 
   async loginWithTwitter(): Promise<LoginResponse> {
@@ -178,22 +177,19 @@ class AuthService {
   }
 
   async loginWithGoogle(idToken: string): Promise<LoginResponse> {
-    try {
-      const data = await httpClient.post<LoginResponse>("/auth/google-login", {
-        idToken,
-      });
+    const data = await httpClient.post<{
+      data: LoginResponse;
+      success: boolean;
+    }>("/auth/google-login", {
+      idToken,
+    });
 
-      if (data.success && data.token && data.user) {
-        this.setToken(data.token);
-        this.setUser(data.user);
-      }
-
-      return data;
-    } catch (error) {
-      throw new Error(
-        error instanceof Error ? error.message : "Google login failed",
-      );
+    if (data.success && data.data.token && data.data.user) {
+      this.setToken(data.data.token);
+      this.setUser(data.data.user);
     }
+
+    return data.data;
   }
 
   // Steam Login

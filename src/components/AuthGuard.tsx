@@ -17,6 +17,7 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
   const publicRoutes = [
     "/login",
     "/register",
+    "/signup-sucess",
     "/forget-password",
     "/reset-password",
     "/auth/steam/callback",
@@ -24,7 +25,7 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
 
   // Routes that require authentication but are not redirected to dashboard
   const authRoutes = [
-    "/signup-success",
+    "/signup-sucess",
     "/verify-email",
     "/welcome",
     "/auth/steam/callback",
