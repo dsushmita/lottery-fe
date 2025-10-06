@@ -1,29 +1,28 @@
-import { useForm } from 'react-hook-form';
+import { useForm } from "react-hook-form";
 import {
   Typography,
   Checkbox,
   FormControlLabel,
   Alert,
   Box,
-} from '@mui/material';
-import Link from 'next/link';
-import AuthLayout from '@/components/AuthLayout';
-import { PrimaryButton } from '@/styles/authStyles';
-import { LoginFormData } from '@/types/auth/auth';
-import { useLogin } from '@/hooks/login/useLogin';
-import { AuthTextField } from '@/components/auth/AuthTextField';
-import { AuthHeader } from '@/components/auth/AuthHeader';
-import { SocialLoginSection } from '@/components/auth/SocialLoginButtons';
+} from "@mui/material";
+import Link from "next/link";
+import AuthLayout from "@/components/AuthLayout";
+import { PrimaryButton } from "@/styles/authStyles";
+import { LoginFormData } from "@/types/auth/auth";
+import { useLogin } from "@/hooks/login/useLogin";
+import { AuthTextField } from "@/components/auth/AuthTextField";
+import { AuthHeader } from "@/components/auth/AuthHeader";
+import { SocialLoginSection } from "@/components/auth/SocialLoginButtons";
 
 export default function LoginForm() {
-  const { 
-    login, 
-    loginWithProvider, 
-    loading, 
-    error, 
-    showPassword, 
+  const {
+    login,
+    loginWithProvider,
+    loading,
+    error,
+    showPassword,
     togglePasswordVisibility,
-    clearError 
   } = useLogin();
 
   const {
@@ -38,19 +37,17 @@ export default function LoginForm() {
     },
   });
 
-  const rememberMe = watch('rememberMe');
+  const rememberMe = watch("rememberMe");
 
   const onSubmit = (data: LoginFormData) => {
-    clearError();
     login(data);
   };
 
-  const handleSocialLogin = (provider: 'google' | 'steam' | 'discord') => {
-    clearError();
+  const handleSocialLogin = (provider: "google" | "steam" | "discord") => {
     loginWithProvider(provider);
   };
 
-  return ( 
+  return (
     <AuthLayout>
       <AuthHeader
         title="Login to your account"
@@ -60,12 +57,6 @@ export default function LoginForm() {
         variant="login"
       />
 
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }} onClose={clearError}>
-          {error.message}
-        </Alert>
-      )}
-
       <form onSubmit={handleSubmit(onSubmit)}>
         <AuthTextField
           name="email"
@@ -74,10 +65,10 @@ export default function LoginForm() {
           error={errors.email}
           disabled={loading}
           validation={{
-            required: 'Email is required',
+            required: "Email is required",
             pattern: {
               value: /^\S+@\S+$/i,
-              message: 'Please enter a valid email',
+              message: "Please enter a valid email",
             },
           }}
           variant="login"
@@ -93,28 +84,38 @@ export default function LoginForm() {
           showPassword={showPassword}
           onTogglePassword={togglePasswordVisibility}
           validation={{
-            required: 'Password is required',
+            required: "Password is required",
             minLength: {
               value: 6,
-              message: 'Password must be at least 6 characters',
+              message: "Password must be at least 6 characters",
             },
           }}
           variant="login"
         />
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 3,
+          }}
+        >
           <FormControlLabel
             control={
               <Checkbox
-                {...register('rememberMe')}
+                {...register("rememberMe")}
                 checked={rememberMe}
-                onChange={(e) => setValue('rememberMe', e.target.checked)}
+                onChange={(e) => setValue("rememberMe", e.target.checked)}
                 disabled={loading}
-                sx={{ color: 'text.secondary', '&.Mui-checked': { color: 'primary.main' } }}
+                sx={{
+                  color: "text.secondary",
+                  "&.Mui-checked": { color: "primary.main" },
+                }}
               />
             }
             label={
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
                 Remember me
               </Typography>
             }
@@ -125,9 +126,9 @@ export default function LoginForm() {
             href="/forget-password"
             variant="body2"
             sx={{
-              color: 'text.secondary',
-              textDecoration: 'none',
-              '&:hover': { color: 'primary.main' },
+              color: "text.secondary",
+              textDecoration: "none",
+              "&:hover": { color: "primary.main" },
             }}
           >
             Forgot Password?
@@ -140,7 +141,7 @@ export default function LoginForm() {
           disabled={loading}
           sx={{ mb: 3 }}
         >
-          {loading ? 'Logging in...' : 'Log in'}
+          {loading ? "Logging in..." : "Log in"}
         </PrimaryButton>
       </form>
 
@@ -153,5 +154,5 @@ export default function LoginForm() {
         showDiscord={true}
       />
     </AuthLayout>
-  ); 
+  );
 }

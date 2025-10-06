@@ -5,31 +5,33 @@ import { authService } from "@/services/authService";
 import { AuthError, LoginFormData } from "@/types/auth/auth";
 import { useAuth } from "@/context/AuthContext";
 import { SteamAuthClient } from "@/utils/steamAuth";
+import { showError, showSuccess } from "@/utils/toast";
 
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<AuthError | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
   const { setUser } = useAuth();
 
   const login = async (formData: LoginFormData) => {
     setLoading(true);
-    setError(null);
 
     try {
       const response = await authService.login(formData);
       if (response.user) {
         setUser(response.user);
+        showSuccess("Login successful! Welcome back.");
         router.push("/dashboard");
       } else {
-        setError({ message: response.message || "Login failed" });
+        const errorMessage = response.message || "Login failed";
+
+        showError(errorMessage);
       }
     } catch (err) {
-      setError({
-        message:
-          err instanceof Error ? err.message : "An unexpected error occurred",
-      });
+      const errorMessage =
+        err instanceof Error ? err.message : "An unexpected error occurred";
+
+      showError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -38,8 +40,6 @@ export const useLogin = () => {
   const loginWithProvider = async (
     provider: "google" | "steam" | "discord",
   ) => {
-    setError(null);
-
     try {
       switch (provider) {
         case "steam":
@@ -55,23 +55,31 @@ export const useLogin = () => {
             steamAuth.login();
           } catch (err) {
             setLoading(false);
-            setError({
-              message:
-                err instanceof Error
-                  ? err.message
-                  : "Failed to initiate Steam login",
-            });
+            const errorMessage =
+              err instanceof Error
+                ? err.message
+                : "Failed to initiate Steam login";
+
+            showError(errorMessage);
           }
           // Don't set loading to false here - let the page redirect
           return;
 
         default:
+          const errorMsg = `${provider} login is not supported yet`;
+
+          showError(errorMsg);
           throw new Error("Unsupported provider");
       }
     } catch (err) {
-      setError({
-        message: err instanceof Error ? err.message : "Social login failed",
-      });
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Social login failed. Please try again.";
+
+      // Only show error if it wasn't already shown above
+      showError(errorMessage);
+    } finally {
       setLoading(false);
     }
   };
@@ -80,17 +88,13 @@ export const useLogin = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const clearError = () => {
-    setError(null);
-  };
-
   return {
     login,
     loginWithProvider,
     togglePasswordVisibility,
-    clearError,
+
     loading,
-    error,
+    error: null,
     showPassword,
   };
 };
