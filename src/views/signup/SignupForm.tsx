@@ -198,7 +198,7 @@ const SignupForm: React.FC = () => {
           disabled={loading}
           sx={{ mb: 3 }}
         >
-          {loading ? "signing in..." : "signin"}
+          {loading ? "signing in..." : "Create Account"}
         </PrimaryButton>
       </form>
       <SocialLoginSection
