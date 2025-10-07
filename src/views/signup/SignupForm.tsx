@@ -5,9 +5,7 @@ import {
   Checkbox,
   FormControlLabel,
   Typography,
-  Button,
 } from "@mui/material";
-import { Person, Email, Lock } from "@mui/icons-material";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { useSignup } from "@/hooks/signup/UseSignup";
@@ -207,7 +205,6 @@ const SignupForm: React.FC = () => {
         variant="login"
         showGoogle={true}
         showSteam={true}
-        showDiscord={true}
       />
     </AuthLayout>
   );

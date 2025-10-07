@@ -1,6 +1,5 @@
 import { styled } from '@mui/material/styles';
 import { Box, Paper, Button, TextField } from '@mui/material';
-import leftSideImage from "../../public/image/leftsideImage.png";
 import geometricBackground from "../../public/image/bgimage.png";
 
 export const AuthContainer = styled(Box)(({ theme }) => ({

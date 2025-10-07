@@ -1,8 +1,7 @@
-// hooks/login/useLogin.ts
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { authService } from "@/services/authService";
-import { AuthError, LoginFormData } from "@/types/auth/auth";
+import { LoginFormData } from "@/types/auth/auth";
 import { useAuth } from "@/context/AuthContext";
 import { SteamAuthClient } from "@/utils/steamAuth";
 import { showError, showSuccess } from "@/utils/toast";

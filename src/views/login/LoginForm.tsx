@@ -1,11 +1,5 @@
 import { useForm } from "react-hook-form";
-import {
-  Typography,
-  Checkbox,
-  FormControlLabel,
-  Alert,
-  Box,
-} from "@mui/material";
+import { Typography, Checkbox, FormControlLabel, Box } from "@mui/material";
 import Link from "next/link";
 import AuthLayout from "@/components/AuthLayout";
 import { PrimaryButton } from "@/styles/authStyles";
@@ -20,7 +14,6 @@ export default function LoginForm() {
     login,
     loginWithProvider,
     loading,
-    error,
     showPassword,
     togglePasswordVisibility,
   } = useLogin();
@@ -151,7 +144,6 @@ export default function LoginForm() {
         variant="login"
         showGoogle={true}
         showSteam={true}
-        showDiscord={true}
       />
     </AuthLayout>
   );

@@ -1,6 +1,4 @@
-// ===== STEP 1: Create Steam Hook (@/hooks/useSteamAuth.ts) =====
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
 
 export interface SteamUser {
   steamId: string;
@@ -16,7 +14,6 @@ export interface SteamUser {
 export const useSteamAuth = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   const loginWithSteam = async (): Promise<void> => {
     setLoading(true);
@@ -24,21 +21,21 @@ export const useSteamAuth = () => {
 
     try {
       const returnUrl = `${window.location.origin}/auth/steam/callback`;
-      
+
       const params = new URLSearchParams({
-        'openid.ns': 'http://specs.openid.net/auth/2.0',
-        'openid.mode': 'checkid_setup',
-        'openid.return_to': returnUrl,
-        'openid.realm': window.location.origin,
-        'openid.identity': 'http://specs.openid.net/auth/2.0/identifier_select',
-        'openid.claimed_id': 'http://specs.openid.net/auth/2.0/identifier_select',
+        "openid.ns": "http://specs.openid.net/auth/2.0",
+        "openid.mode": "checkid_setup",
+        "openid.return_to": returnUrl,
+        "openid.realm": window.location.origin,
+        "openid.identity": "http://specs.openid.net/auth/2.0/identifier_select",
+        "openid.claimed_id":
+          "http://specs.openid.net/auth/2.0/identifier_select",
       });
 
       // Redirect to Steam (this will leave the page, so loading stays true)
       window.location.href = `https://steamcommunity.com/openid/login?${params.toString()}`;
-      
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Steam login failed');
+      setError(err instanceof Error ? err.message : "Steam login failed");
       setLoading(false);
     }
   };
@@ -48,10 +45,10 @@ export const useSteamAuth = () => {
     setError(null);
 
     try {
-      const response = await fetch('/api/auth/steam/verify', {
-        method: 'POST',
+      const response = await fetch("/api/auth/steam/verify", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ query }),
       });
@@ -59,12 +56,13 @@ export const useSteamAuth = () => {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        throw new Error(result.message || 'Steam verification failed');
+        throw new Error(result.message || "Steam verification failed");
       }
 
       return result;
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Steam verification failed';
+      const errorMessage =
+        err instanceof Error ? err.message : "Steam verification failed";
       setError(errorMessage);
       throw new Error(errorMessage);
     } finally {

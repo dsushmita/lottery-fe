@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Typography, Alert, Paper, CircularProgress } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { SteamAuthClient } from "@/utils/steamAuth";
 import { authService } from "@/services/authService";
 import { useAuth } from "@/context/AuthContext";
-import { AuthError } from "@/types/auth/auth";
 import { showError } from "@/utils/toast";
 
 export default function SteamCallbackPage() {

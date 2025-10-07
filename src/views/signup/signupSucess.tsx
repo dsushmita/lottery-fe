@@ -1,6 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
-import Link from "next/link";
+import { Box } from "@mui/material";
 import AuthLayout from "@/components/AuthLayout";
 import { AuthHeader } from "@/components/auth/AuthHeader";
 import { PrimaryButton } from "@/styles/authStyles";

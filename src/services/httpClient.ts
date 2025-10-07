@@ -1,28 +1,35 @@
-import { ErrorResponse, HttpClientConfig, RequestConfig } from "@/types/http/httpClient";
+import {
+  ErrorResponse,
+  HttpClientConfig,
+  RequestConfig,
+} from "@/types/http/httpClient";
 
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 class HttpClient {
   private baseURL: string;
   private defaultHeaders: Record<string, string>;
-  private timeout: number;
+  private readonly timeout: number;
 
   constructor(config?: HttpClientConfig) {
-    this.baseURL = config?.baseURL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+    this.baseURL =
+      config?.baseURL ||
+      process.env.NEXT_PUBLIC_API_URL ||
+      "http://localhost:5000";
     this.timeout = config?.timeout || 10000; // 10 seconds default
     this.defaultHeaders = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       ...config?.defaultHeaders,
     };
   }
 
   // Configuration methods
   setAuthToken(token: string): void {
-    this.defaultHeaders['Authorization'] = `Bearer ${token}`;
+    this.defaultHeaders["Authorization"] = `Bearer ${token}`;
   }
 
   removeAuthToken(): void {
-    delete this.defaultHeaders['Authorization'];
+    delete this.defaultHeaders["Authorization"];
   }
 
   setBaseURL(url: string): void {
@@ -60,15 +67,15 @@ class HttpClient {
 
     if (!response.ok) {
       let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
-      
+
       try {
         const errorData: ErrorResponse = await response.json();
         errorMessage = errorData.message || errorData.error || errorMessage;
       } catch {
         // If JSON parsing fails, use status text
       }
-      
-      console.error('API Error:', errorMessage);
+
+      console.error("API Error:", errorMessage);
       throw new Error(errorMessage);
     }
 
@@ -76,7 +83,8 @@ class HttpClient {
       const result = await response.json();
       return result as T;
     } catch (error) {
-      throw new Error('Invalid JSON response from server');
+      console.error("Invalid JSON response from server", error);
+      throw new Error("Invalid JSON response from server");
     }
   }
 
@@ -89,12 +97,17 @@ class HttpClient {
 
     // Create safe data object for logging
     const safeData = { ...data };
-    
+
     // Hide sensitive fields
-    const sensitiveFields = ['password', 'confirmPassword', 'userId', 'currentPassword'];
-    sensitiveFields.forEach(field => {
+    const sensitiveFields = [
+      "password",
+      "confirmPassword",
+      "userId",
+      "currentPassword",
+    ];
+    sensitiveFields.forEach((field) => {
       if (safeData[field]) {
-        safeData[field] = '***';
+        safeData[field] = "***";
       }
     });
 
@@ -106,10 +119,10 @@ class HttpClient {
     method: HttpMethod,
     endpoint: string,
     data?: any,
-    config?: RequestConfig
+    config?: RequestConfig,
   ): Promise<T> {
     const url = this.buildUrl(endpoint, config?.params);
-    
+
     const headers = {
       ...this.defaultHeaders,
       ...config?.headers,
@@ -120,7 +133,7 @@ class HttpClient {
     if (data instanceof FormData) {
       body = data;
       // Remove Content-Type header for FormData (browser will set it)
-      delete headers['Content-Type'];
+      delete headers["Content-Type"];
     } else if (data) {
       body = JSON.stringify(data);
     }
@@ -129,7 +142,10 @@ class HttpClient {
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), config?.timeout || this.timeout);
+      const timeoutId = setTimeout(
+        () => controller.abort(),
+        config?.timeout || this.timeout,
+      );
 
       const response = await fetch(url, {
         method,
@@ -140,18 +156,17 @@ class HttpClient {
 
       clearTimeout(timeoutId);
       return await this.handleResponse<T>(response);
-
     } catch (error) {
       // Handle specific error types
       if (error instanceof Error) {
-        if (error.name === 'AbortError') {
-          throw new Error('Request timeout. Please try again.');
+        if (error.name === "AbortError") {
+          throw new Error("Request timeout. Please try again.");
         }
-        if (error.message.includes('fetch') || error instanceof TypeError) {
-          throw new Error('Network error. Please check your connection.');
+        if (error.message.includes("fetch") || error instanceof TypeError) {
+          throw new Error("Network error. Please check your connection.");
         }
       }
-      
+
       // Re-throw other errors (including our custom ones)
       throw error;
     }
@@ -159,64 +174,76 @@ class HttpClient {
 
   // HTTP Methods
   async get<T = any>(endpoint: string, config?: RequestConfig): Promise<T> {
-    return this.request<T>('GET', endpoint, undefined, config);
+    return this.request<T>("GET", endpoint, undefined, config);
   }
 
-  async post<T = any>(endpoint: string, data?: any, config?: RequestConfig): Promise<T> {
-    return this.request<T>('POST', endpoint, data, config);
+  async post<T = any>(
+    endpoint: string,
+    data?: any,
+    config?: RequestConfig,
+  ): Promise<T> {
+    return this.request<T>("POST", endpoint, data, config);
   }
 
-  async put<T = any>(endpoint: string, data?: any, config?: RequestConfig): Promise<T> {
-    return this.request<T>('PUT', endpoint, data, config);
+  async put<T = any>(
+    endpoint: string,
+    data?: any,
+    config?: RequestConfig,
+  ): Promise<T> {
+    return this.request<T>("PUT", endpoint, data, config);
   }
 
-  async patch<T = any>(endpoint: string, data?: any, config?: RequestConfig): Promise<T> {
-    return this.request<T>('PATCH', endpoint, data, config);
+  async patch<T = any>(
+    endpoint: string,
+    data?: any,
+    config?: RequestConfig,
+  ): Promise<T> {
+    return this.request<T>("PATCH", endpoint, data, config);
   }
 
   async delete<T = any>(endpoint: string, config?: RequestConfig): Promise<T> {
-    return this.request<T>('DELETE', endpoint, undefined, config);
+    return this.request<T>("DELETE", endpoint, undefined, config);
   }
 
   // Convenience method for file uploads
   async uploadFile<T = any>(
-    endpoint: string, 
-    file: File, 
+    endpoint: string,
+    file: File,
     additionalData?: Record<string, any>,
-    config?: RequestConfig
+    config?: RequestConfig,
   ): Promise<T> {
     const formData = new FormData();
-    formData.append('file', file);
-    
+    formData.append("file", file);
+
     if (additionalData) {
       Object.entries(additionalData).forEach(([key, value]) => {
         formData.append(key, String(value));
       });
     }
 
-    return this.request<T>('POST', endpoint, formData, config);
+    return this.request<T>("POST", endpoint, formData, config);
   }
 
   // Convenience method for multiple file uploads
   async uploadFiles<T = any>(
-    endpoint: string, 
-    files: File[], 
+    endpoint: string,
+    files: File[],
     additionalData?: Record<string, any>,
-    config?: RequestConfig
+    config?: RequestConfig,
   ): Promise<T> {
     const formData = new FormData();
-    
-    files.forEach((file, index) => {
+
+    files.forEach((file) => {
       formData.append(`files`, file);
     });
-    
+
     if (additionalData) {
       Object.entries(additionalData).forEach(([key, value]) => {
         formData.append(key, String(value));
       });
     }
 
-    return this.request<T>('POST', endpoint, formData, config);
+    return this.request<T>("POST", endpoint, formData, config);
   }
 }
 

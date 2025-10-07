@@ -36,10 +36,9 @@ export interface ErrorResponse {
 }
 
 //http/methods.ts
-export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 export interface RequestOptions extends RequestConfig {
   method?: HttpMethod;
   body?: any;
 }
-

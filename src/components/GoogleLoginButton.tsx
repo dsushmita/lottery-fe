@@ -40,12 +40,9 @@ export default function GoogleLoginButton({
   variant = "custom",
 }: GoogleLoginButtonProps) {
   const {
-    loading,
-    error,
     initializeGoogleAuth,
-    signInWithGoogle,
+
     renderGoogleButton,
-    clearError,
   } = useGoogleAuth();
 
   const googleButtonRef = useRef<HTMLDivElement>(null);

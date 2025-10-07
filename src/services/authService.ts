@@ -9,12 +9,7 @@ import {
 } from "@/types/auth/auth";
 import { httpClient } from "../lib/httpClient";
 
-interface APIResponse<T> {
-  success: boolean;
-  statusCode?: number;
-  message?: string;
-  data: T;
-}
+
 
 class AuthService {
   private readonly TOKEN_KEY = "auth_token";
@@ -126,6 +121,7 @@ class AuthService {
       this.setUser(user);
       return user;
     } catch (error) {
+      console.error('Failed to get current user:', error);
       this.clearTokens();
       this.clearUser();
       return null;
@@ -149,6 +145,7 @@ class AuthService {
       this.setRefreshToken(response.refreshToken);
       return response.token;
     } catch (error) {
+      console.error('Failed to refresh token:', error);
       this.clearTokens();
       this.clearUser();
       return null;

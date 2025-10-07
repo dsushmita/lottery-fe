@@ -1,11 +1,11 @@
-import React from 'react';
-import { TextField, InputAdornment, IconButton } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { StyledTextField } from '@/styles/authStyles';
+import React from "react";
+import { InputAdornment, IconButton } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { StyledTextField } from "@/styles/authStyles";
 
 interface AuthTextFieldProps {
   name: string;
-  placeholder?: string;           
+  placeholder?: string;
   type?: string;
   register: any;
   error?: any;
@@ -14,7 +14,7 @@ interface AuthTextFieldProps {
   showPassword?: boolean;
   onTogglePassword?: () => void;
   validation?: object;
-  variant?: 'login' | 'signup' | 'forgot-password' | 'reset-password';
+  variant?: "login" | "signup" | "forgot-password" | "reset-password";
   label?: string;
   [key: string]: any;
 }
@@ -22,7 +22,7 @@ interface AuthTextFieldProps {
 export const AuthTextField: React.FC<AuthTextFieldProps> = ({
   name,
   placeholder,
-  type = 'text',
+  type = "text",
   register,
   error,
   disabled = false,
@@ -30,43 +30,37 @@ export const AuthTextField: React.FC<AuthTextFieldProps> = ({
   showPassword,
   onTogglePassword,
   validation = {},
-  variant = 'login',
+  variant = "login",
   label,
   ...otherProps
 }) => {
-  const isPasswordField = type === 'password' || (type === 'text' && onTogglePassword);
-  
-  const getFieldStyles = () => {
-    
-    
-    
-    
-    return {};
-  };
+  const isPasswordField =
+    type === "password" || (type === "text" && onTogglePassword);
 
   const commonProps = {
     ...register(name, validation),
     fullWidth: true,
     label,
     placeholder,
-    type: isPasswordField ? (showPassword ? 'text' : 'password') : type,
+    type: isPasswordField ? (showPassword ? "text" : "password") : type,
     variant: "outlined" as const,
     error: !!error,
     helperText: error?.message,
     disabled,
     InputProps: {
       startAdornment: startIcon && (
-        <InputAdornment position="start">
-          {startIcon}
-        </InputAdornment>
+        <InputAdornment position="start">{startIcon}</InputAdornment>
       ),
       endAdornment: isPasswordField && onTogglePassword && (
         <InputAdornment position="end">
           <IconButton
             onClick={onTogglePassword}
             edge="end"
-            sx={{ 
-              color: variant === 'login' ? 'text.secondary' : 'rgba(255, 255, 255, 0.7)'
+            sx={{
+              color:
+                variant === "login"
+                  ? "text.secondary"
+                  : "rgba(255, 255, 255, 0.7)",
             }}
             disabled={disabled}
           >
@@ -75,10 +69,14 @@ export const AuthTextField: React.FC<AuthTextFieldProps> = ({
         </InputAdornment>
       ),
     },
-    ...otherProps
+    ...otherProps,
   };
 
-  if (variant === 'signup' || variant === 'forgot-password' || variant === 'reset-password') {
+  if (
+    variant === "signup" ||
+    variant === "forgot-password" ||
+    variant === "reset-password"
+  ) {
     return <StyledTextField {...commonProps} />;
   }
 

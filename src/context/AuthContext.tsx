@@ -1,4 +1,4 @@
-// context/AuthContext.tsx
+
 "use client";
 import {
   createContext,
@@ -8,7 +8,6 @@ import {
   ReactNode,
   useMemo,
   useCallback,
-  useRef,
 } from "react";
 import { User } from "@/types/auth/auth";
 import { authService } from "@/services/authService";
@@ -36,7 +35,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [authError, setAuthError] = useState<string | null>(null);
   const router = useRouter();
-  const steamCallbackProcessed = useRef(false);
+
 
   const initializeAuth = useCallback(async () => {
     try {
