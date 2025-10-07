@@ -60,7 +60,7 @@ export default function ForgotPasswordForm() {
           </PrimaryButton>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'center' }}>
             <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-              Don't have an account yet?
+              Do&apos;nt have an account yet?
             </Typography>
             <Typography
               component={Link}

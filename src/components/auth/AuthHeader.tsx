@@ -44,7 +44,7 @@ export const AuthHeader: React.FC<AuthHeaderProps> = ({
   };
 
   const isPasswordReset = variant === "reset-password";
-  const isSignup = variant === "signup";
+ 
 
   return (
     <Box sx={{ mb: 4 }}>

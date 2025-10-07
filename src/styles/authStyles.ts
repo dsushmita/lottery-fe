@@ -1,6 +1,5 @@
 import { styled } from '@mui/material/styles';
 import { Box, Paper, Button, TextField } from '@mui/material';
-import leftSideImage from "../../public/image/leftsideImage.png";
 import geometricBackground from "../../public/image/bgimage.png";
 
 export const AuthContainer = styled(Box)(({ theme }) => ({
@@ -190,29 +189,30 @@ export const SocialButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-export const PrimaryButton = styled(Button)(({ theme }) => ({
+export const PrimaryButton = styled(Button, {
+  shouldForwardProp: (prop) => prop !== 'fullWidth',
+})<{ fullWidth?: boolean }>(({ theme, fullWidth }) => ({
   padding: theme.spacing(1.5, 3),
   backgroundColor: '#3ABEF9',
-  color: ' #101004',
+  color: '#101004',
   fontWeight: 400,
   textTransform: 'none',
   borderRadius: 8,
   fontSize: '1rem',
   marginBottom: '24px',
-  
-  // '&:hover': {
-  //   backgroundColor: theme.palette.primary.dark,
-  // },
-  
+  width: fullWidth ? '100%' : 'auto',
+
   '&:disabled': {
-    backgroundColor: theme.palette.mode === 'dark' 
-      ? 'rgba(255, 255, 255, 0.1)' 
-      : 'rgba(0, 0, 0, 0.1)',
-    color: theme.palette.mode === 'dark' 
-      ? 'rgba(255, 255, 255, 0.3)' 
-      : 'rgba(0, 0, 0, 0.3)',
+    backgroundColor:
+      theme.palette.mode === 'dark'
+        ? 'rgba(255, 255, 255, 0.1)'
+        : 'rgba(0, 0, 0, 0.1)',
+    color:
+      theme.palette.mode === 'dark'
+        ? 'rgba(255, 255, 255, 0.3)'
+        : 'rgba(0, 0, 0, 0.3)',
   },
-  
+
   [theme.breakpoints.down('sm')]: {
     padding: theme.spacing(1.2, 2),
     fontSize: '0.95rem',

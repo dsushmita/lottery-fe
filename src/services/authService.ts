@@ -9,12 +9,7 @@ import {
 } from "@/types/auth/auth";
 import { httpClient } from "../lib/httpClient";
 
-interface APIResponse<T> {
-  success: boolean;
-  statusCode?: number;
-  message?: string;
-  data: T;
-}
+
 
 class AuthService {
   private readonly TOKEN_KEY = "auth_token";
@@ -22,7 +17,7 @@ class AuthService {
   private readonly USER_KEY = "user_data";
 
   // Token management
-  private setToken(token: string): void {
+  setToken(token: string): void {
     localStorage.setItem(this.TOKEN_KEY, token);
   }
 
@@ -30,7 +25,7 @@ class AuthService {
     localStorage.removeItem(this.TOKEN_KEY);
   }
 
-  private getToken(): string | null {
+  getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
@@ -48,7 +43,7 @@ class AuthService {
   }
 
   // User management
-  private setUser(user: User): void {
+  setUser(user: User): void {
     localStorage.setItem(this.USER_KEY, JSON.stringify(user));
   }
 
@@ -67,21 +62,20 @@ class AuthService {
 
   // Login
   async login(credentials: LoginFormData): Promise<LoginResponse> {
-    try {
-      const data = await httpClient.post<LoginResponse>("/auth/login", {
-        email: credentials.email,
-        password: credentials.password,
-      });
+    const data = await httpClient.post<{
+      data: LoginResponse;
+      success: boolean;
+    }>("/auth/login", {
+      email: credentials.email,
+      password: credentials.password,
+    });
 
-      if (data.success && data.token && data.user) {
-        this.setToken(data.token);
-        this.setUser(data.user);
-      }
-
-      return data;
-    } catch (error) {
-      throw new Error(error instanceof Error ? error.message : "Login failed");
+    if (data.success && data?.data?.token && data.data.user) {
+      this.setToken(data.data.token);
+      this.setUser(data.data.user);
     }
+
+    return data.data;
   }
 
   async loginWithTwitter(): Promise<LoginResponse> {
@@ -127,6 +121,7 @@ class AuthService {
       this.setUser(user);
       return user;
     } catch (error) {
+      console.error('Failed to get current user:', error);
       this.clearTokens();
       this.clearUser();
       return null;
@@ -150,6 +145,7 @@ class AuthService {
       this.setRefreshToken(response.refreshToken);
       return response.token;
     } catch (error) {
+      console.error('Failed to refresh token:', error);
       this.clearTokens();
       this.clearUser();
       return null;
@@ -178,59 +174,29 @@ class AuthService {
   }
 
   async loginWithGoogle(idToken: string): Promise<LoginResponse> {
-    try {
-      const data = await httpClient.post<LoginResponse>("/auth/google-login", {
-        idToken,
-      });
+    const data = await httpClient.post<{
+      data: LoginResponse;
+      success: boolean;
+    }>("/auth/google-login", {
+      idToken,
+    });
 
-      if (data.success && data.token && data.user) {
-        this.setToken(data.token);
-        this.setUser(data.user);
-      }
-
-      return data;
-    } catch (error) {
-      throw new Error(
-        error instanceof Error ? error.message : "Google login failed",
-      );
+    if (data.success && data.data.token && data.data.user) {
+      this.setToken(data.data.token);
+      this.setUser(data.data.user);
     }
+
+    return data.data;
   }
 
   // Steam Login
-  async getSteamLoginUrl(): Promise<string> {
-    try {
-      const response = await httpClient.get<APIResponse<string>>("/auth/steam-login-url");
-      if (response.success && response.data) {
-        return response.data;
-      }
-      throw new Error(response.message || "Failed to get Steam login URL");
-    } catch (error) {
-      throw new Error(
-        error instanceof Error ? error.message : "Failed to get Steam login URL"
-      );
-    }
-  }
+  async steamLoginVerify(params: any): Promise<LoginResponse> {
+    const response = await httpClient.post<{ data: LoginResponse }>(
+      "/auth/steam-login-verify",
+      { steamParams: params },
+    );
 
-  async loginWithSteam(params: URLSearchParams): Promise<LoginResponse> {
-    try {
-      // Pass URLSearchParams directly to httpClient
-      const response = await httpClient.get<LoginResponse>(
-        "/auth/steam/callback",
-        { params }
-      );
-
-      if (response.success && response.token && response.user) {
-        this.setToken(response.token);
-        this.setUser(response.user);
-        return response;
-      } else {
-        throw new Error(response.message || "Steam login failed");
-      }
-    } catch (error) {
-      throw new Error(
-        error instanceof Error ? error.message : "Steam login failed"
-      );
-    }
+    return response.data;
   }
 }
 

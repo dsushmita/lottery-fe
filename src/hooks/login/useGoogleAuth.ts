@@ -16,8 +16,7 @@ export const useGoogleAuth = () => {
 
     try {
       const loginResponse = await authService.loginWithGoogle(response.credential);
-      
-      if (loginResponse.success && loginResponse.user) {
+      if (loginResponse.user) {
         setUser(loginResponse.user);
         router.push('/dashboard');
       } else {
