@@ -8,6 +8,20 @@ import { AuthTextField } from '@/components/auth/AuthTextField';
 import { AuthHeader } from '@/components/auth/AuthHeader';
 
 export default function ForgotPasswordForm() {
+    const IconCheck = () => (
+    <svg
+      width="48"
+      height="48"
+      viewBox="0 0 48 48"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M46 24L41.12 18.44L41.8 11.08L34.58 9.44L30.8 3.08L24 6L17.2 3.08L13.42 9.44L6.2 11.06L6.88 18.42L2 24L6.88 29.56L6.2 36.94L13.42 38.58L17.2 44.94L24 42L30.8 44.92L34.58 38.56L41.8 36.92L41.12 29.56L46 24ZM20 34L12 26L14.82 23.18L20 28.34L33.18 15.16L36 18L20 34Z"
+        fill="#3ABEF9"
+      />
+    </svg>
+  );
   const {
     register,
     handleSubmit,
@@ -22,42 +36,13 @@ export default function ForgotPasswordForm() {
     return (
       <AuthLayout>
         <Box sx={{ textAlign: 'center' }}>
-          <Box
-            sx={{
-              width: 64,
-              height: 64,
-              borderRadius: '50%',
-              bgcolor: '#22c55e',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              mx: 'auto',
-              mb: 3,
-            }}
-          >
-            <Typography sx={{ fontSize: '2rem', color: 'white' }}>✓</Typography>
-          </Box>
+          <IconCheck />
           <AuthHeader
             title="Email Sent!"
             variant="forgot-password"
-            description="Check your email and open the link to continue. The email may take a few minutes to arrive."
+            description={"Check your email and open the link to\ncontinue."}
           />
-          <PrimaryButton
-            onClick={resendEmail}
-            disabled={loading}
-            variant="outlined"
-            sx={{ 
-              mb: 2,
-              borderColor: '#3ABEF9',
-              color: '#3ABEF9',
-              '&:hover': {
-                borderColor: '#5855eb',
-                bgcolor: 'rgba(99, 102, 241, 0.1)'
-              }
-            }}
-          >
-            {loading ? 'Sending...' : 'Resend Email'}
-          </PrimaryButton>
+        
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'center' }}>
             <Typography variant="body2" sx={{ color: 'rgba(255, 255, 255, 0.7)' }}>
               Do&apos;nt have an account yet?

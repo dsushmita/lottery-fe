@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { AuthError } from '@/types/auth/auth';
 import { authService } from '@/services/authService';
 import { useAuth } from '@/context/AuthContext';
+import { showSuccess } from '@/utils/toast';
 
 interface SignupFormData {
   userName: string;
@@ -34,6 +35,7 @@ export const useSignup = () => {
         if (response.user) {
           setUser(response.user);
         }
+       showSuccess("Account Created!");
 
         router.push('/signup-sucess');
 
