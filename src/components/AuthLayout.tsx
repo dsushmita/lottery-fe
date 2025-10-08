@@ -9,7 +9,7 @@ import {
   LogoContainer
 } from '@/styles/authStyles';
 import Image from 'next/image';
-import logoImage from "../../public/image/companylogo.png";
+import logoImage from "../../public/image/companyLogo.svg";
 
 interface AuthLayoutProps {
   children: React.ReactNode;

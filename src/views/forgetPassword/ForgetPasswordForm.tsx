@@ -126,7 +126,7 @@ export default function ForgotPasswordForm() {
         </Typography>
         <Typography
           component={Link}
-          href="/login"
+          href="/register"
           variant="body2"
           sx={{
             color: '#3ABEF9',
