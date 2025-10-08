@@ -1,22 +1,5 @@
+@import "tailwindcss/theme";
 @import "tailwindcss/preflight";
-@import "tailwindcss/utilities";
-@import "tailwindcss/components";
-@import "tailwindcss/base";
-@import "tailwindcss/screens";
-@import "tailwindcss/colors";
-@import "tailwindcss/plugins";
-@import "tailwindcss/functions";
-@import "tailwindcss/variables";
-@import "tailwindcss/mixins";
-@import "tailwindcss/typography";
-@import "tailwindcss/forms";
-@import "tailwindcss/aspect-ratio";
-@import "tailwindcss/line-clamp";
-@import "tailwindcss/container-queries";
-@import "tailwindcss/custom-forms";
-@import "tailwindcss/gradients";
-@import "tailwindcss/shadows";
-@import "tailwindcss/transitions";      
 
 * {
   margin: 0;

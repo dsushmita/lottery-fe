@@ -9,8 +9,6 @@ import {
 } from "@/types/auth/auth";
 import { httpClient } from "../lib/httpClient";
 
-
-
 class AuthService {
   private readonly TOKEN_KEY = "auth_token";
   private readonly REFRESH_TOKEN_KEY = "refresh_token";
@@ -121,7 +119,7 @@ class AuthService {
       this.setUser(user);
       return user;
     } catch (error) {
-      console.error('Failed to get current user:', error);
+      console.error("Failed to get current user:", error);
       this.clearTokens();
       this.clearUser();
       return null;
@@ -145,7 +143,7 @@ class AuthService {
       this.setRefreshToken(response.refreshToken);
       return response.token;
     } catch (error) {
-      console.error('Failed to refresh token:', error);
+      console.error("Failed to refresh token:", error);
       this.clearTokens();
       this.clearUser();
       return null;
