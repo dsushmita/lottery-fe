@@ -1,15 +1,16 @@
-import { AuthProvider } from '@/context/AuthContext';
-import { CustomThemeProvider } from '@/context/ThemeContext';
-import { CssBaseline } from '@mui/material';
-import './globals.css';
-import type { Metadata } from 'next';
-import Script from 'next/script';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { AuthProvider } from "@/context/AuthContext";
+import { CustomThemeProvider } from "@/context/ThemeContext";
+import { CssBaseline } from "@mui/material";
+import "./globals.css";
+import type { Metadata } from "next";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
-  title: 'COP THEM - Lottery Application',
-  description: 'Scalable Next.js frontend for lottery application with Material UI and TypeScript',
+  title: "COP THEM - Lottery Application",
+  description:
+    "Scalable Next.js frontend for lottery application with Material UI and TypeScript",
 };
 
 export default function RootLayout({
@@ -19,17 +20,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head>
-        <Script
-          src="https://accounts.google.com/gsi/client"
-          strategy="beforeInteractive"
-        />
-      </head>
+      <head></head>
       <body>
         <CustomThemeProvider>
           <CssBaseline />
           <AuthProvider>
-            {children}
+            <GoogleOAuthProvider
+              clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
+            >
+              {children}
+            </GoogleOAuthProvider>
           </AuthProvider>
           <ToastContainer
             position="top-right"

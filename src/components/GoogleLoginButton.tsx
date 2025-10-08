@@ -1,11 +1,9 @@
 "use client";
-import { useEffect, useRef } from "react";
-import { Button } from "@mui/material";
 import { useGoogleAuth } from "@/hooks/login/useGoogleAuth";
+import { Button, CircularProgress } from "@mui/material";
 
 interface GoogleLoginButtonProps {
   disabled?: boolean;
-  variant?: "button" | "custom";
 }
 
 const GoogleIcon = () => (
@@ -37,111 +35,50 @@ const GoogleIcon = () => (
 
 export default function GoogleLoginButton({
   disabled,
-  variant = "custom",
-}: GoogleLoginButtonProps) {
-  const {
-    initializeGoogleAuth,
-
-    renderGoogleButton,
-  } = useGoogleAuth();
-
-  const googleButtonRef = useRef<HTMLDivElement>(null);
-  const isInitialized = useRef(false);
-
-  useEffect(() => {
-    if (!isInitialized.current) {
-      const timer = setTimeout(() => {
-        initializeGoogleAuth();
-
-        if (variant === "button" && googleButtonRef.current) {
-          renderGoogleButton("google-signin-button");
-        } else if (variant === "custom" && googleButtonRef.current) {
-          renderGoogleButton("google-signin-button-custom");
-        }
-
-        isInitialized.current = true;
-      }, 1000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [initializeGoogleAuth, renderGoogleButton, variant]);
-
-  if (variant === "button") {
-    return (
-      <div>
-        <div
-          id="google-signin-button"
-          ref={googleButtonRef}
-          style={{ display: disabled ? "none" : "block" }}
-        />
-        {disabled && (
-          <Button disabled sx={{ width: 280, height: 40 }}>
-            Google Sign In (Disabled)
-          </Button>
-        )}
-      </div>
-    );
-  }
+}: Readonly<GoogleLoginButtonProps>) {
+  const { handleGoogleLogin, isLoginLoading } = useGoogleAuth();
 
   // For custom variant, use a styled wrapper around the Google button
   return (
-    <div
-      style={{
-        position: "relative",
-        minWidth: 50,
-
-        height: 50,
-        borderRadius: 3,
+    <Button
+      onClick={() => handleGoogleLogin()}
+      disabled={disabled}
+      className="relative min-w-[50px] h-[50px] rounded-[3px] flex items-center justify-center transition-all duration-200 ease-in-out p-0"
+      sx={{
         backgroundColor: "rgba(255, 255, 255, 0.1)",
         border: "1px solid rgba(255, 255, 255, 0.2)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
         cursor: disabled ? "not-allowed" : "pointer",
-        transition: "all 0.2s ease-in-out",
         opacity: disabled ? 0.5 : 1,
-      }}
-      onMouseEnter={(e) => {
-        if (!disabled) {
-          e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.15)";
-          e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.3)";
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!disabled) {
-          e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
-          e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.2)";
-        }
+        textTransform: "none",
+        minWidth: "unset",
+        "&:hover": {
+          backgroundColor: disabled
+            ? "rgba(255, 255, 255, 0.1)"
+            : "rgba(255, 255, 255, 0.15)",
+          borderColor: disabled
+            ? "rgba(255, 255, 255, 0.2)"
+            : "rgba(255, 255, 255, 0.3)",
+        },
+        "&:focus": {
+          boxShadow: disabled ? "none" : "0 0 0 2px rgba(255, 255, 255, 0.5)",
+        },
+        "&.Mui-disabled": {
+          opacity: 0.5,
+          cursor: "not-allowed",
+        },
       }}
     >
       <div
         id="google-signin-button-custom"
-        ref={googleButtonRef}
-        style={{
-          display: disabled ? "none" : "block",
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          opacity: 0,
-          cursor: "pointer",
-        }}
+        className={`absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer ${
+          disabled ? "hidden" : "block"
+        }`}
+        style={{ pointerEvents: "all" }}
       />
-      <GoogleIcon />
+      {isLoginLoading ? <CircularProgress size={24} /> : <GoogleIcon />}
       {disabled && (
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0, 0, 0, 0.3)",
-            borderRadius: "8px",
-          }}
-        />
+        <div className="absolute top-0 left-0 w-full h-full bg-black/30 rounded-lg pointer-events-none" />
       )}
-    </div>
+    </Button>
   );
 }

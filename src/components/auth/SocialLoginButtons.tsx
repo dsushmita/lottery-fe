@@ -82,9 +82,7 @@ export const SocialLoginSection: React.FC<SocialLoginSectionProps> = ({
             overflow: "hidden",
           }}
         >
-          {showGoogle && (
-            <GoogleLoginButton variant="custom" disabled={disabled} />
-          )}
+          {showGoogle && <GoogleLoginButton disabled={disabled} />}
 
           {showSteam && (
             <SocialButton
@@ -101,9 +99,7 @@ export const SocialLoginSection: React.FC<SocialLoginSectionProps> = ({
     // Signup variant
     return (
       <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
-        {showGoogle && (
-          <GoogleLoginButton variant="custom" disabled={disabled} />
-        )}
+        {showGoogle && <GoogleLoginButton disabled={disabled} />}
 
         {showSteam && (
           <SocialButton
