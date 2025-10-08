@@ -1,93 +1,169 @@
-import { createTheme } from "@mui/material";
+import { createTheme } from '@mui/material/styles';
 
-declare module '@mui/material/styles' {
-  interface Theme {
-    custom: {
-      auth: {
-        leftPanelBg: string;
-        rightPanelBg: string;
-        inputBg: string;
-        inputBorder: string;
-        primaryButton: string;
-      };
-    };
+// Color palette from your Figma design
+export const colors = {
+  primary: '#3ABEF9',
+  bgDark: '#0B0F14',
+  bgSecondary: '#1A1F29',
+  info: '#2F80ED',
+  success: '#27AE60',
+  warning: '#E2B93B',
+  error: '#EB5757',
+  white: '#FFFFFF',
+  gray: {
+    light: '#8E9AAB',
+    medium: '#6B7280',
+    dark: '#4B5563',
   }
-  interface ThemeOptions {
-    custom?: {
-      auth?: {
-        leftPanelBg?: string;
-        rightPanelBg?: string;
-        inputBg?: string;
-        inputBorder?: string;
-        primaryButton?: string;
-      };
-    };
-  }
-}
+};
 
-const baseTheme = {
+export const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: colors.primary,
+      contrastText: colors.bgDark,
+    },
+    secondary: {
+      main: colors.bgSecondary,
+      contrastText: colors.white,
+    },
+    background: {
+      default: colors.bgDark,
+      paper: colors.bgSecondary,
+    },
+    text: {
+      primary: colors.white,
+      secondary: colors.gray.light,
+    },
+    info: {
+      main: colors.info,
+      contrastText: colors.white,
+    },
+    success: {
+      main: colors.success,
+      contrastText: colors.white,
+    },
+    warning: {
+      main: colors.warning,
+      contrastText: colors.bgDark,
+    },
+    error: {
+      main: colors.error,
+      contrastText: colors.white,
+    },
+    divider: 'rgba(255, 255, 255, 0.1)',
+  },
   typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+    h1: {
+      fontSize: '2.5rem',
+      fontWeight: 700,
+      color: colors.white,
+    },
+    h2: {
+      fontSize: '2rem',
+      fontWeight: 600,
+      color: colors.white,
+    },
+    h3: {
+      fontSize: '1.75rem',
+      fontWeight: 600,
+      color: colors.white,
+    },
+    h4: {
+      fontSize: '1.5rem',
+      fontWeight: 600,
+      color: colors.white,
+    },
+    h5: {
+      fontSize: '1.25rem',
+      fontWeight: 500,
+      color: colors.white,
+    },
+    h6: {
+      fontSize: '1rem',
+      fontWeight: 500,
+      color: colors.white,
+    },
+    button: {
+      textTransform: 'none',
+      fontWeight: 500,
+    },
   },
   shape: {
     borderRadius: 8,
   },
-};
-
-export const lightTheme = createTheme({
-  ...baseTheme,
-  palette: {
-    mode: 'light',
-    primary: {
-      main: '#3ABEF9',
-      light: '#818cf8',
-      dark: '#4f46e5',
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          backgroundColor: colors.bgDark,
+          color: colors.white,
+        },
+      },
     },
-    background: {
-      default: '#f8fafc',
-      paper: '#ffffff',
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+          padding: '12px 24px',
+          fontSize: '1rem',
+          fontWeight: 500,
+        },
+        contained: {
+          boxShadow: 'none',
+          '&:hover': {
+            boxShadow: 'none',
+          },
+        },
+        containedPrimary: {
+          backgroundColor: colors.primary,
+          color: colors.bgDark,
+          '&:hover': {
+            backgroundColor: '#2A8EC7',
+          },
+        },
+      },
     },
-    text: {
-      primary: '#1e293b',
-      secondary: '#64748b',
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            borderRadius: 8,
+            backgroundColor: colors.bgSecondary,
+            '& fieldset': {
+              borderColor: 'rgba(255, 255, 255, 0.1)',
+            },
+            '&:hover fieldset': {
+              borderColor: 'rgba(255, 255, 255, 0.2)',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: colors.primary,
+            },
+          },
+          '& .MuiInputBase-input': {
+            color: colors.white,
+          },
+        },
+      },
     },
-  },
-  custom: {
-    auth: {
-      leftPanelBg: 'linear-gradient(135deg, #3ABEF9 0%, #4f46e5 100%)',
-      rightPanelBg: '#ffffff',
-      inputBg: '#f1f5f9',
-      inputBorder: '#e2e8f0',
-      primaryButton: '#3ABEF9',
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: 12,
+          backgroundColor: colors.bgSecondary,
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.3)',
+        },
+      },
     },
-  },
-});
-
-export const darkTheme = createTheme({
-  ...baseTheme,
-  palette: {
-    mode: 'dark',
-    primary: {
-      main: '#3ABEF9',
-      light: '#818cf8',
-      dark: '#4f46e5',
-    },
-    background: {
-      default: '#0f172a',
-      paper: '#1e293b',
-    },
-    text: {
-      primary: '#f1f5f9',
-      secondary: '#94a3b8',
-    },
-  },
-  custom: {
-    auth: {
-      leftPanelBg: 'linear-gradient(135deg, #3ABEF9 0%, #4f46e5 100%)',
-      rightPanelBg: '#1A1F29',
-      inputBg: 'rgba(255, 255, 255, 0.05)',
-      inputBorder: 'rgba(255, 255, 255, 0.2)',
-      primaryButton: '#3ABEF9',
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          backgroundColor: colors.bgSecondary,
+          backgroundImage: 'none',
+        },
+      },
     },
   },
 });

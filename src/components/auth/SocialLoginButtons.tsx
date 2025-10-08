@@ -101,21 +101,14 @@ export const SocialLoginSection: React.FC<SocialLoginSectionProps> = ({
       <Box sx={{ display: "flex", gap: 2, justifyContent: "center" }}>
         {showGoogle && <GoogleLoginButton disabled={disabled} />}
 
-        {showSteam && (
-          <SocialButton
-            onClick={() => onSocialLogin("steam")}
-            disabled={disabled}
-            sx={{
-              backgroundColor: "#171a21",
-              color: "white",
-              "&:hover": {
-                backgroundColor: "#1b2838",
-              },
-            }}
-          >
-            <SteamIcon />
-          </SocialButton>
-        )}
+       {showSteam && (
+            <SocialButton
+              onClick={() => onSocialLogin("steam")}
+              disabled={disabled}
+            >
+              <SteamIcon />
+            </SocialButton>
+          )}
       </Box>
     );
   };

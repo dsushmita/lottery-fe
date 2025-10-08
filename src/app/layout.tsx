@@ -8,9 +8,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
-  title: "COP THEM - Lottery Application",
+  title: "COP THEME",
   description:
-    "Scalable Next.js frontend for lottery application with Material UI and TypeScript",
+    "A GAMING APPLICATION FOR LOTTERY SYSTEMS, INCLUDING LOTTO, SWEEPSTAKES, AND RAFFLES.",
 };
 
 export default function RootLayout({
@@ -41,7 +41,7 @@ export default function RootLayout({
             pauseOnFocusLoss
             draggable
             pauseOnHover
-            theme="light"
+            theme="dark"
           />
         </CustomThemeProvider>
       </body>
