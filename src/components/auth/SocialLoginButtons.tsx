@@ -39,8 +39,8 @@ export const SocialLoginSection: React.FC<SocialLoginSectionProps> = ({
           y2="22"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#191818" />
-          <stop offset="1" stop-color="#00ADEE" />
+          <stop stopColor="#191818" />
+          <stop offset="1" stopColor="#00ADEE" />
         </linearGradient>
       </defs>
     </svg>
