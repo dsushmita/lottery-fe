@@ -2,9 +2,10 @@ import React from "react";
 import { Box, Divider, Typography } from "@mui/material";
 import { SocialButton } from "@/styles/authStyles";
 import GoogleLoginButton from "@/components/GoogleLoginButton";
+import { SocialProvider } from "@/enum/auth/auth.enum";
 
 interface SocialLoginSectionProps {
-  onSocialLogin: (provider: "google" | "steam") => void;
+  onSocialLogin: (provider: SocialProvider) => void;
   disabled?: boolean;
   variant?: "login" | "signup";
   showGoogle?: boolean;
@@ -86,7 +87,7 @@ export const SocialLoginSection: React.FC<SocialLoginSectionProps> = ({
 
           {showSteam && (
             <SocialButton
-              onClick={() => onSocialLogin("steam")}
+              onClick={() => onSocialLogin(SocialProvider.Steam)}
               disabled={disabled}
             >
               <SteamIcon />
@@ -103,7 +104,7 @@ export const SocialLoginSection: React.FC<SocialLoginSectionProps> = ({
 
         {showSteam && (
           <SocialButton
-            onClick={() => onSocialLogin("steam")}
+            onClick={() => onSocialLogin(SocialProvider.Steam)}
             disabled={disabled}
             sx={{
               backgroundColor: "#171a21",

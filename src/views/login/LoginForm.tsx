@@ -8,6 +8,7 @@ import { useLogin } from "@/hooks/login/useLogin";
 import { AuthTextField } from "@/components/auth/AuthTextField";
 import { AuthHeader } from "@/components/auth/AuthHeader";
 import { SocialLoginSection } from "@/components/auth/SocialLoginButtons";
+import { SocialProvider } from "@/enum/auth/auth.enum";
 
 export default function LoginForm() {
   const {
@@ -36,7 +37,7 @@ export default function LoginForm() {
     login(data);
   };
 
-  const handleSocialLogin = (provider: "google" | "steam" | "discord") => {
+  const handleSocialLogin = (provider: SocialProvider) => {
     loginWithProvider(provider);
   };
 

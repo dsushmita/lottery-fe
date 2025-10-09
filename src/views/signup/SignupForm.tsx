@@ -14,6 +14,7 @@ import { AuthTextField } from "@/components/auth/AuthTextField";
 import { AuthHeader } from "@/components/auth/AuthHeader";
 import { SocialLoginSection } from "@/components/auth/SocialLoginButtons";
 import { PrimaryButton } from "@/styles/authStyles";
+import { SocialProvider } from "@/enum/auth/auth.enum";
 interface SignupFormData {
   userName: string;
   email: string;
@@ -54,7 +55,7 @@ const SignupForm: React.FC = () => {
     await signup(data);
   };
 
-  const handleSocialLogin = (provider: "google" | "steam") => {
+  const handleSocialLogin = (provider: SocialProvider) => {
     clearError();
     signupWithProvider(provider);
   };
