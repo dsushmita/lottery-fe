@@ -1,9 +1,11 @@
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { AuthError } from '@/types/auth/auth';
-import { authService } from '@/services/authService';
-import { useAuth } from '@/context/AuthContext';
-import { showSuccess } from '@/utils/toast';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { AuthError } from "@/types/auth/auth";
+import { authService } from "@/services/authService";
+import { useAuth } from "@/context/AuthContext";
+import { showSuccess } from "@/utils/toast";
+import { SocialProvider } from "@/enum/auth/auth.enum";
+import { SteamAuthClient } from "@/utils/steamAuth";
 
 interface SignupFormData {
   userName: string;
@@ -19,7 +21,6 @@ export const useSignup = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
   const { setUser } = useAuth();
-  
 
   const signup = async (formData: SignupFormData) => {
     setLoading(true);
@@ -31,34 +32,40 @@ export const useSignup = () => {
         email: formData.email,
         password: formData.password,
       });
-       // Update auth context with user data
-        if (response.user) {
-          setUser(response.user);
-        }
-       showSuccess("Account Created!");
+      // Update auth context with user data
+      if (response.user) {
+        setUser(response.user);
+      }
+      showSuccess("Account Created!");
 
-        router.push('/signup-sucess');
-
+      router.push("/signup-sucess");
     } catch (err) {
-      setError({ 
-        message: err instanceof Error ? err.message : 'An unexpected error occurred' 
+      setError({
+        message:
+          err instanceof Error ? err.message : "An unexpected error occurred",
       });
     } finally {
       setLoading(false);
     }
   };
 
-  const signupWithProvider = async (provider: 'google' | 'steam' ) => {
-    setLoading(true);
-    setError(null);
-
+  const signupWithProvider = async (provider: SocialProvider) => {
     try {
-      // Handle social signup (if your service supports it)
-      console.log(`Signup with ${provider}`);
-      // Add your social signup logic here
+      setLoading(true);
+      setError(null);
+      if (provider === SocialProvider.Steam) {
+        const steamAuth = new SteamAuthClient({
+          realm: process.env.NEXT_PUBLIC_URL || window.location.origin,
+          returnUrl: `${
+            process.env.NEXT_PUBLIC_URL || window.location.origin
+          }/auth/steam/callback`,
+        });
+
+        steamAuth.login();
+      }
     } catch (err) {
-      setError({ 
-        message: err instanceof Error ? err.message : 'Social signup failed' 
+      setError({
+        message: err instanceof Error ? err.message : "Social signup failed",
       });
     } finally {
       setLoading(false);
@@ -66,11 +73,11 @@ export const useSignup = () => {
   };
 
   const togglePasswordVisibility = () => {
-    setShowPassword(prev => !prev);
+    setShowPassword((prev) => !prev);
   };
 
   const toggleConfirmPasswordVisibility = () => {
-    setShowConfirmPassword(prev => !prev);
+    setShowConfirmPassword((prev) => !prev);
   };
 
   const clearError = () => {

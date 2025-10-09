@@ -51,5 +51,3 @@ export interface AuthError {
   message: string;
   field?: keyof LoginFormData;
 }
-
-export type SocialProvider = 'google' | 'twitter' | 'discord';
