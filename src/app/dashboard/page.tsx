@@ -1,21 +1,19 @@
 'use client';
-import React from 'react';
-import { useAuth } from '@/context/AuthContext';
-import MainLayout from '@/components/layouts/PageLayout';
-import { Typography } from '@mui/material'; 
+import { Header } from "@/views/header/Header";
+import { usePathname } from "next/navigation";
 
-export default function DashboardPage() {
-  const { user } = useAuth();
+export default function DashboardPage({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+  const activeTab = pathname.split('/')[2] || 'mystery-box';
 
   return (
-    <MainLayout title="Dashboard">
-      <Typography variant="h4" gutterBottom sx={{ color: 'text.primary' }}>
-        Dashboard
-      </Typography>
-
-      <Typography variant="body1" sx={{ mb: 4, color: 'text.secondary' }}>
-        Welcome back, {user?.name}!
-      </Typography>
-    </MainLayout>
+    <div className="min-h-screen bg-background">
+      <Header activeTab={activeTab} />
+      <main>{children}</main>
+    </div>
   );
 }
