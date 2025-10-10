@@ -42,7 +42,8 @@ const VerticalDivider = () => (
     orientation="vertical"
     flexItem
     sx={{
-      height: "24px",
+      height: "auto",  // Change from "24px"
+      alignSelf: "stretch",  // Change from "center"
       bgcolor: "rgba(255, 255, 255, 0.1)",
       width: "1px",
       mx: 1,
@@ -158,6 +159,7 @@ export const Header: React.FC<HeaderProps> = ({
           <Box sx={{ flex: 1, display: { xs: "block", md: "none" } }} />
 
           {/* Right Actions */}
+         
           <Stack
             direction="row"
             spacing={{ xs: 1, md: 1.5 }}
