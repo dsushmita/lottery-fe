@@ -107,10 +107,10 @@ export const SocialLoginSection: React.FC<SocialLoginSectionProps> = ({
             onClick={() => onSocialLogin(SocialProvider.Steam)}
             disabled={disabled}
             sx={{
-              backgroundColor: "#171a21",
+              backgroundColor: "#0B0F14",
               color: "white",
               "&:hover": {
-                backgroundColor: "#1b2838",
+                backgroundColor: "#0B0F14",
               },
             }}
           >

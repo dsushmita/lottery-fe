@@ -160,20 +160,9 @@ export const StyledTextField = styled(TextField)(({ theme }) => ({
 export const SocialButton = styled(Button)(({ theme }) => ({
   minWidth: 50,
   height: 50,
-  borderRadius: 3,
-  backgroundColor: theme.palette.mode === 'dark' 
-    ? 'rgba(255, 255, 255, 0.1)' 
-    : 'rgba(0, 0, 0, 0.05)',
-  border: `1px solid ${theme.palette.mode === 'dark' 
-    ? 'rgba(255, 255, 255, 0.2)' 
-    : 'rgba(0, 0, 0, 0.1)'}`,
+  borderRadius: 8,
+  backgroundColor: '#0B0F14',
   color: theme.palette.text.primary,
-  
-  '&:hover': {
-    backgroundColor: theme.palette.mode === 'dark' 
-      ? 'rgba(255, 255, 255, 0.15)' 
-      : 'rgba(0, 0, 0, 0.1)',
-  },
   
   '& .MuiSvgIcon-root': {
     fontSize: 24,

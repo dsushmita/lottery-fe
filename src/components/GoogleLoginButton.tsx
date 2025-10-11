@@ -43,25 +43,17 @@ export default function GoogleLoginButton({
     <Button
       onClick={() => handleGoogleLogin()}
       disabled={disabled}
-      className="relative min-w-[50px] h-[50px] rounded-[3px] flex items-center justify-center transition-all duration-200 ease-in-out p-0"
       sx={{
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
-        border: "1px solid rgba(255, 255, 255, 0.2)",
+         backgroundColor: "#0B0F14",
+              color: "white",
+              
+        border: "1px solid #0B0F14",
         cursor: disabled ? "not-allowed" : "pointer",
-        opacity: disabled ? 0.5 : 1,
+       
         textTransform: "none",
         minWidth: "unset",
-        "&:hover": {
-          backgroundColor: disabled
-            ? "rgba(255, 255, 255, 0.1)"
-            : "rgba(255, 255, 255, 0.15)",
-          borderColor: disabled
-            ? "rgba(255, 255, 255, 0.2)"
-            : "rgba(255, 255, 255, 0.3)",
-        },
-        "&:focus": {
-          boxShadow: disabled ? "none" : "0 0 0 2px rgba(255, 255, 255, 0.5)",
-        },
+        
+       
         "&.Mui-disabled": {
           opacity: 0.5,
           cursor: "not-allowed",
