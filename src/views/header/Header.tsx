@@ -32,6 +32,7 @@ import { MobileDrawer } from "./components/MobileDrawer";
 import { NavItem } from "./components/NavItem";
 import { Logo } from "@/assets/icons";
 import Image from "next/image";
+import { Footer } from "../footer/Footer";
 
 export type HeaderProps = {
   activeTab?: string;
@@ -245,7 +246,7 @@ export const Header: React.FC<HeaderProps> = ({
               <Avatar
                 src={
                   user.avatar ||
-                  `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(
+                  `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(
                     user.name ?? "user",
                   )}`
                 }
@@ -285,6 +286,8 @@ export const Header: React.FC<HeaderProps> = ({
         onTabChange={navigateToTab}
         onProfileClick={handleProfileClick}
       />
+
+      <Footer />
     </>
   );
 };
