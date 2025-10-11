@@ -40,10 +40,9 @@ export type HeaderProps = {
 const VerticalDivider = () => (
   <Divider
     orientation="vertical"
-    flexItem
     sx={{
-      height: "auto",  // Change from "24px"
-      alignSelf: "stretch",  // Change from "center"
+      display: { xs: "none", md: "block" }, // Hide on mobile, show on desktop
+      height: "64px",
       bgcolor: "rgba(255, 255, 255, 0.1)",
       width: "1px",
       mx: 1,
@@ -159,7 +158,7 @@ export const Header: React.FC<HeaderProps> = ({
           <Box sx={{ flex: 1, display: { xs: "block", md: "none" } }} />
 
           {/* Right Actions */}
-         
+
           <Stack
             direction="row"
             spacing={{ xs: 1, md: 1.5 }}
@@ -169,26 +168,10 @@ export const Header: React.FC<HeaderProps> = ({
             <BalanceBadge balance={0} onClick={handleBalanceClick} />
             <VerticalDivider />
 
-            {/* Add Funds */}
-            <IconButton
-              onClick={handleAddFunds}
-              sx={{
-                width: { xs: 32, md: 36 },
-                height: { xs: 32, md: 36 },
-                bgcolor: "#3ABEF9",
-                color: "#FFFFFF",
-                "&:hover": { bgcolor: "#2A8EC7" },
-              }}
-              aria-label="Add funds"
-            >
-              <AddIcon fontSize="small" />
-            </IconButton>
-
             {/* Cart - Desktop only */}
             <IconButton
               onClick={handleCartClick}
               sx={{
-                display: { xs: "none", md: "flex" },
                 color: "#8E9AAB",
                 "&:hover": {
                   bgcolor: "rgba(255, 255, 255, 0.05)",
@@ -199,6 +182,7 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <ShoppingCartOutlinedIcon />
             </IconButton>
+            <VerticalDivider />
 
             {/* Notifications */}
             <IconButton
@@ -224,6 +208,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <NotificationsNoneOutlinedIcon />
               </Badge>
             </IconButton>
+            <VerticalDivider />
 
             {/* Chat - Mobile only */}
             <IconButton
