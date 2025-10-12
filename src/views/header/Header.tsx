@@ -14,6 +14,7 @@ import {
   useTheme,
   useMediaQuery,
   Divider,
+  Container,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
@@ -33,6 +34,8 @@ import { NavItem } from "./components/NavItem";
 import { Logo } from "@/assets/icons";
 import Image from "next/image";
 import { Footer } from "../footer/Footer";
+import { HeroSection } from "../home/HeroSection";
+import { LiveDropPanel } from "../home/LiveDropPanel";
 
 export type HeaderProps = {
   activeTab?: string;
@@ -286,6 +289,28 @@ export const Header: React.FC<HeaderProps> = ({
         onTabChange={navigateToTab}
         onProfileClick={handleProfileClick}
       />
+      
+ 
+      <Box sx={{ display: "flex", position: "relative" }}>
+        <Box
+          component="main"
+          sx={{
+            flex: 1,
+            mr: { xs: 0, lg: "300px" },
+            pt: 3,
+            pb: 6,
+          }}
+        >
+          <Container maxWidth="xl">
+            <HeroSection />
+          </Container>
+        </Box>
+
+        <Box sx={{ display: { xs: "none", lg: "block" } }}>
+          <LiveDropPanel  />
+        </Box>
+      </Box>
+
 
       <Footer />
     </>
