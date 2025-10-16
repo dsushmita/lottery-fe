@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
 
   // Define route types
   const authRoutes = ['/login', '/register', '/forget-password', '/reset-password'];
-  const protectedRoutes = ['/dashboard', '/settings', '/profile'];
+  const protectedRoutes = ['/dashboard', '/settings', '/profile', '/boxes'];
   const publicRoutes = ['/about', '/contact', '/terms'];
 
   // Get token from cookie or header

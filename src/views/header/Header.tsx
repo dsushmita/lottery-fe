@@ -36,6 +36,7 @@ import Image from "next/image";
 import { Footer } from "../footer/Footer";
 import { HeroSection } from "../home/HeroSection";
 import { LiveDropPanel } from "../home/LiveDropPanel";
+import { FeaturedBoxes } from "../featuresbox/FeaturedBoxes";
 
 export type HeaderProps = {
   activeTab?: string;
@@ -45,7 +46,7 @@ const VerticalDivider = () => (
   <Divider
     orientation="vertical"
     sx={{
-      display: { xs: "none", md: "block" }, // Hide on mobile, show on desktop
+      display: { xs: "none", md: "block" },
       height: "64px",
       bgcolor: "rgba(255, 255, 255, 0.1)",
       width: "1px",
@@ -162,7 +163,6 @@ export const Header: React.FC<HeaderProps> = ({
           <Box sx={{ flex: 1, display: { xs: "block", md: "none" } }} />
 
           {/* Right Actions */}
-
           <Stack
             direction="row"
             spacing={{ xs: 1, md: 1.5 }}
@@ -289,8 +289,8 @@ export const Header: React.FC<HeaderProps> = ({
         onTabChange={navigateToTab}
         onProfileClick={handleProfileClick}
       />
-      
- 
+
+      {/* Main Content Layout */}
       <Box sx={{ display: "flex", position: "relative" }}>
         <Box
           component="main"
@@ -302,15 +302,19 @@ export const Header: React.FC<HeaderProps> = ({
           }}
         >
           <Container maxWidth="xl">
+            {/* Hero Section */}
             <HeroSection />
+
+            {/* Featured Boxes Section */}
+            <FeaturedBoxes />
           </Container>
         </Box>
 
+        {/* Live Drop Panel - Desktop Only */}
         <Box sx={{ display: { xs: "none", lg: "block" } }}>
-          <LiveDropPanel  />
+          <LiveDropPanel />
         </Box>
       </Box>
-
 
       <Footer />
     </>
