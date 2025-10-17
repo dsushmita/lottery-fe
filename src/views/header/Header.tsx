@@ -298,7 +298,7 @@ export const Header: React.FC<HeaderProps> = ({
             flex: 1,
             mr: { xs: 0, lg: "300px" },
             pt: 3,
-            pb: 6,
+           
           }}
         >
           <Container maxWidth="xl">
@@ -316,7 +316,7 @@ export const Header: React.FC<HeaderProps> = ({
         </Box>
       </Box>
 
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

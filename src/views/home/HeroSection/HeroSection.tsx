@@ -7,7 +7,6 @@ import { HeroContent } from "@/types/home/home";
 import { HeroBackground } from "./HeroBackground";
 import { HeroImage } from "./HeroImage";
 
-
 interface HeroSectionProps {
   content?: Partial<HeroContent>;
   onOpenClick?: () => void;
@@ -52,31 +51,33 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       sx={{
         position: "relative",
         bgcolor: "#0f1419",
-        borderRadius: 2,
+        borderRadius: 1,
         overflow: "hidden",
-        border: "2px solid rgba(58, 190, 249, 0.3)",
+        border: "2px solid",
+        borderTop: 0,
+        borderColor: "primary.main",
       }}
     >
       <HeroBackground />
 
-      <Container maxWidth="lg">
+      <Container
+        disableGutters
+        maxWidth="xl"
+        sx={{
+          pl: { xs: 2, md: 6 },
+          pr: 0,
+        }}
+      >
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            py: { xs: 6, md: 8 },
             position: "relative",
-            minHeight: { xs: "400px", md: "450px" },
           }}
         >
-          <Box
-            sx={{
-              flex: 1,
-              zIndex: 2,
-              maxWidth: { xs: "100%", md: "55%" },
-            }}
-          >
+          {/* Left Text Section */}
+          <Box sx={{ flex: 1, zIndex: 2 }}>
             <Typography
               component="h2"
               sx={{
@@ -138,9 +139,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   fontWeight: 600,
                   textTransform: "none",
                   borderRadius: 1,
-                  "&:hover": {
-                    bgcolor: "#2A8EC7",
-                  },
+                  "&:hover": { bgcolor: "#2A8EC7" },
                   boxShadow: "0 4px 20px rgba(58, 190, 249, 0.3)",
                 }}
               >
@@ -171,7 +170,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             </Box>
           </Box>
 
-          <HeroImage imageUrl={heroContent.backgroundImage} />
+          {/* Right Image Section */}
+          <HeroImage imageUrl={heroContent.backgroundImage}  />
         </Box>
       </Container>
     </Box>
