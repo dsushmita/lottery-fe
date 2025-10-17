@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useRef } from "react";
+import { useRouter } from "next/navigation";
 import {
   Box,
   Typography,
@@ -11,13 +11,15 @@ import {
   Stack,
   CircularProgress,
   Alert,
-} from '@mui/material';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+} from "@mui/material";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
-import { BoxCard } from './BoxCard';
-import { Box as BoxType } from '@/types/featuresbox/box';
-import { useFeaturedBoxes } from '@/hooks/featuresbox/usefeaturesbox';
+import { BoxCard } from "./BoxCard";
+import { Box as BoxType } from "@/types/featuresbox/box";
+import { useFeaturedBoxes } from "@/hooks/featuresbox/usefeaturesbox";
+import Image from "next/image";
+import featureIcon from "../../../public/image/featureicon.svg";
 
 export const FeaturedBoxes: React.FC = () => {
   const router = useRouter();
@@ -25,23 +27,23 @@ export const FeaturedBoxes: React.FC = () => {
   const { boxes, loading, error } = useFeaturedBoxes();
 
   const handleViewMore = () => {
-    router.push('/boxes');
+    router.push("/boxes");
   };
 
   const handleBoxClick = (box: BoxType) => {
     router.push(`/box/${box.id}`);
   };
 
-  const scroll = (direction: 'left' | 'right') => {
+  const scroll = (direction: "left" | "right") => {
     if (scrollContainerRef.current) {
       const scrollAmount = 300;
       const newScrollLeft =
         scrollContainerRef.current.scrollLeft +
-        (direction === 'left' ? -scrollAmount : scrollAmount);
-      
+        (direction === "left" ? -scrollAmount : scrollAmount);
+
       scrollContainerRef.current.scrollTo({
         left: newScrollLeft,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   };
@@ -50,13 +52,13 @@ export const FeaturedBoxes: React.FC = () => {
     return (
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
           minHeight: 300,
         }}
       >
-        <CircularProgress sx={{ color: '#3ABEF9' }} />
+        <CircularProgress sx={{ color: "#3ABEF9" }} />
       </Box>
     );
   }
@@ -81,23 +83,19 @@ export const FeaturedBoxes: React.FC = () => {
         <Stack direction="row" alignItems="center" spacing={2}>
           <Box
             sx={{
-              width: 40,
-              height: 40,
-              bgcolor: 'rgba(58, 190, 249, 0.1)',
-              border: '1px solid rgba(58, 190, 249, 0.3)',
-              borderRadius: 1,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <Box
+             <Image src={featureIcon} alt="Logo"  />
+            {/* <Box
               component="svg"
               width="24"
               height="24"
               viewBox="0 0 24 24"
               fill="none"
-              sx={{ color: '#3ABEF9' }}
+              sx={{ color: "#3ABEF9" }}
             >
               <path
                 d="M20 7L12 3L4 7M20 7L12 11M20 7V17L12 21M12 11L4 7M12 11V21M4 7V17L12 21"
@@ -106,51 +104,57 @@ export const FeaturedBoxes: React.FC = () => {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
-            </Box>
+            </Box> */}
           </Box>
           <Typography
             variant="h5"
             sx={{
-              color: '#FFFFFF',
+              color: "#FFFFFF",
               fontWeight: 700,
-              fontSize: { xs: '1.25rem', md: '1.5rem' },
+              fontSize: { xs: "1.25rem", md: "1.5rem" },
             }}
           >
             Featured Boxes
           </Typography>
         </Stack>
 
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack
+          direction="row"
+          alignItems="center"
+          spacing={1}
+          sx={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
           {/* Navigation Arrows - Desktop Only */}
-          <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
+          <Box
+            sx={{
+              display: { xs: "none", md: "flex" },
+              gap: 1,
+              alignItems: "center", // 👈 ensures arrows align with button
+            }}
+          >
             <IconButton
-              onClick={() => scroll('left')}
+              onClick={() => scroll("left")}
               sx={{
-                bgcolor: 'rgba(58, 190, 249, 0.1)',
-                border: '1px solid rgba(58, 190, 249, 0.3)',
-                color: '#3ABEF9',
+                border: "2px solid #fff",
+                color: "#fff",
                 width: 36,
                 height: 36,
-                '&:hover': {
-                  bgcolor: 'rgba(58, 190, 249, 0.2)',
-                  border: '1px solid rgba(58, 190, 249, 0.5)',
-                },
+                borderRadius: "2px",
               }}
             >
               <ChevronLeftIcon />
             </IconButton>
             <IconButton
-              onClick={() => scroll('right')}
+              onClick={() => scroll("right")}
               sx={{
-                bgcolor: 'rgba(58, 190, 249, 0.1)',
-                border: '1px solid rgba(58, 190, 249, 0.3)',
-                color: '#3ABEF9',
+                border: "2px solid #fff",
+                color: "#fff",
                 width: 36,
                 height: 36,
-                '&:hover': {
-                  bgcolor: 'rgba(58, 190, 249, 0.2)',
-                  border: '1px solid rgba(58, 190, 249, 0.5)',
-                },
+                borderRadius: "2px",
               }}
             >
               <ChevronRightIcon />
@@ -160,20 +164,16 @@ export const FeaturedBoxes: React.FC = () => {
           {/* View More Button */}
           <Button
             onClick={handleViewMore}
-            variant="contained"
             sx={{
-              bgcolor: 'rgba(58, 190, 249, 0.1)',
-              border: '1px solid rgba(58, 190, 249, 0.3)',
-              color: '#3ABEF9',
-              textTransform: 'none',
+              color: "#fff",
+              border: "2px solid #fff",
+              textTransform: "none",
               fontWeight: 600,
               px: { xs: 2, md: 3 },
               py: 1,
-              fontSize: { xs: '0.85rem', md: '0.95rem' },
-              '&:hover': {
-                bgcolor: 'rgba(58, 190, 249, 0.2)',
-                border: '1px solid rgba(58, 190, 249, 0.5)',
-              },
+              fontSize: { xs: "0.85rem", md: "0.95rem" },
+              height: 36, //
+              borderRadius: "2px",
             }}
           >
             View More
@@ -182,7 +182,7 @@ export const FeaturedBoxes: React.FC = () => {
       </Stack>
 
       {/* Desktop Grid - Hidden on Mobile */}
-      <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+      <Box sx={{ display: { xs: "none", md: "block" } }}>
         <Grid container spacing={2}>
           {boxes.map((box) => (
             <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={box.id}>
@@ -196,16 +196,16 @@ export const FeaturedBoxes: React.FC = () => {
       <Box
         ref={scrollContainerRef}
         sx={{
-          display: { xs: 'flex', md: 'none' },
+          display: { xs: "flex", md: "none" },
           gap: 2,
-          overflowX: 'auto',
+          overflowX: "auto",
           pb: 2,
-          scrollbarWidth: 'none',
-          '&::-webkit-scrollbar': {
-            display: 'none',
+          scrollbarWidth: "none",
+          "&::-webkit-scrollbar": {
+            display: "none",
           },
-          '& > *': {
-            flex: '0 0 280px',
+          "& > *": {
+            flex: "0 0 280px",
             maxWidth: 280,
           },
         }}

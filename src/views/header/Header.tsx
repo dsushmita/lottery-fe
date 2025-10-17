@@ -37,6 +37,7 @@ import { Footer } from "../footer/Footer";
 import { HeroSection } from "../home/HeroSection";
 import { LiveDropPanel } from "../home/LiveDropPanel";
 import { FeaturedBoxes } from "../featuresbox/FeaturedBoxes";
+import Section from "../section/Section";
 
 export type HeaderProps = {
   activeTab?: string;
@@ -297,7 +298,7 @@ export const Header: React.FC<HeaderProps> = ({
           sx={{
             flex: 1,
             mr: { xs: 0, lg: "300px" },
-            pt: 3,
+            pt: '50px'
            
           }}
         >
@@ -306,7 +307,10 @@ export const Header: React.FC<HeaderProps> = ({
             <HeroSection />
 
             {/* Featured Boxes Section */}
-            <FeaturedBoxes />
+            <Section>
+               <FeaturedBoxes />
+            </Section>
+           
           </Container>
         </Box>
 
