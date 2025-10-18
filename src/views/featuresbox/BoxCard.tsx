@@ -11,20 +11,7 @@ interface BoxCardProps {
 }
 
 export const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
-  const getRarityGradient = (rarity?: string) => {
-    switch (rarity) {
-      case 'legendary':
-        return 'linear-gradient(135deg, rgba(138, 43, 226, 0.3) 0%, rgba(75, 0, 130, 0.3) 100%)';
-      case 'epic':
-        return 'linear-gradient(135deg, rgba(255, 20, 147, 0.3) 0%, rgba(138, 43, 226, 0.3) 100%)';
-      case 'rare':
-        return 'linear-gradient(135deg, rgba(30, 144, 255, 0.3) 0%, rgba(0, 191, 255, 0.3) 100%)';
-      case 'common':
-        return 'linear-gradient(135deg, rgba(0, 255, 127, 0.3) 0%, rgba(50, 205, 50, 0.3) 100%)';
-      default:
-        return 'linear-gradient(135deg, rgba(58, 190, 249, 0.1) 0%, rgba(58, 190, 249, 0.05) 100%)';
-    }
-  };
+ 
 
   return (
     <Card
@@ -50,7 +37,7 @@ export const BoxCard: React.FC<BoxCardProps> = ({ box, onClick }) => {
             position: 'relative',
             width: '100%',
             height: { xs: 180, sm: 200, md: 220 },
-            background: getRarityGradient(box.rarity),
+            background: '#1A1F29',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
