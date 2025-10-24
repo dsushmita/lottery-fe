@@ -38,6 +38,7 @@ import { HeroSection } from "../home/HeroSection";
 import { LiveDropPanel } from "../home/LiveDropPanel";
 import { FeaturedBoxes } from "../featuresbox/FeaturedBoxes";
 import Section from "../section/Section";
+import { TopBattles } from "../battle";
 
 export type HeaderProps = {
   activeTab?: string;
@@ -310,7 +311,9 @@ export const Header: React.FC<HeaderProps> = ({
             <Section>
                <FeaturedBoxes />
             </Section>
-           
+            <Section>
+              <TopBattles limit={4} showViewAllButton={true} />
+             </Section>
           </Container>
         </Box>
 
