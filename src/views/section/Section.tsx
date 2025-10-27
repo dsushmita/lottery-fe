@@ -22,7 +22,7 @@ export const Section: React.FC<SectionProps> = ({ children, sx, id, className })
       id={id}
       className={className}
       sx={{
-        // pb: "80px",               // 80px top and bottom
+        pt: "80px",              
         width: "100%",
         boxSizing: "border-box",
         ...sx,

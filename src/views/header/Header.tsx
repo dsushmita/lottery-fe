@@ -39,6 +39,7 @@ import { LiveDropPanel } from "../home/LiveDropPanel";
 import { FeaturedBoxes } from "../featuresbox/FeaturedBoxes";
 import Section from "../section/Section";
 import { TopBattles } from "../battle";
+import { Rewards } from "../rewards/Rewards";
 
 export type HeaderProps = {
   activeTab?: string;
@@ -299,8 +300,7 @@ export const Header: React.FC<HeaderProps> = ({
           sx={{
             flex: 1,
             mr: { xs: 0, lg: "300px" },
-            pt: '50px'
-           
+            pt: "50px",
           }}
         >
           <Container maxWidth="xl">
@@ -309,11 +309,14 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Featured Boxes Section */}
             <Section>
-               <FeaturedBoxes />
+              <FeaturedBoxes />
             </Section>
             <Section>
               <TopBattles limit={4} showViewAllButton={true} />
-             </Section>
+            </Section>
+            <Section>
+              <Rewards />
+            </Section>
           </Container>
         </Box>
 
