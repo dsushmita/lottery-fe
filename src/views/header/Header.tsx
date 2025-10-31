@@ -40,6 +40,7 @@ import { FeaturedBoxes } from "../featuresbox/FeaturedBoxes";
 import Section from "../section/Section";
 import { TopBattles } from "../battle";
 import { Rewards } from "../rewards/Rewards";
+import { Leaderboard } from "../Leaderboard/Leaderboard";
 
 export type HeaderProps = {
   activeTab?: string;
@@ -316,6 +317,9 @@ export const Header: React.FC<HeaderProps> = ({
             </Section>
             <Section>
               <Rewards />
+            </Section>
+             <Section>
+              <Leaderboard />
             </Section>
           </Container>
         </Box>
