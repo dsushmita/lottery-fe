@@ -1,7 +1,7 @@
-import React, { memo } from 'react';
-import { Button } from '@mui/material';
-import { Icons } from '@/assets/icons';
-import { NavItem as NavItemType } from '@/types/header/header';
+import React, { memo } from "react";
+import { Button } from "@mui/material";
+import { Icons } from "@/assets/icons";
+import { NavItem as NavItemType } from "@/types/header/header";
 
 interface NavItemProps {
   item: NavItemType;
@@ -22,15 +22,16 @@ export const NavItem = memo<NavItemProps>(({ item, isActive, onClick }) => {
         py: 1,
         minHeight: 64,
         borderRadius: 0,
-        bgcolor: isActive ? '#2F80ED' : 'transparent',
-        color: isActive ? '#FFFFFF' : '#8E9AAB',
-        fontSize: '0.875rem',
+        background: isActive
+          ? "linear-gradient(180deg, #0D1117 0%, #0A1E2E 100%)"
+          : "transparent",
+        borderBottom: isActive ? "2px solid #3ABEF9" : "2px solid transparent",
+        boxShadow: isActive ? "0px 4px 12px rgba(58, 190, 249, 0.3)" : "none",
+        color: isActive ? "#FFFFFF" : "#8E9AAB",
+        fontSize: "0.875rem",
         fontWeight: 500,
-        textTransform: 'none',
-        '&:hover': {
-          bgcolor: isActive ? '#2F80ED' : 'rgba(255, 255, 255, 0.05)',
-          color: '#FFFFFF',
-        },
+        textTransform: "none",
+        transition: "all 0.3s ease",
       }}
     >
       {item.label}
@@ -38,4 +39,4 @@ export const NavItem = memo<NavItemProps>(({ item, isActive, onClick }) => {
   );
 });
 
-NavItem.displayName = 'NavItem';
+NavItem.displayName = "NavItem";

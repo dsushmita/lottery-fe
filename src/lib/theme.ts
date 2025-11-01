@@ -29,9 +29,7 @@ const baseTheme = {
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
   },
-  shape: {
-    borderRadius: 8,
-  },
+ 
 };
 
 export const lightTheme = createTheme({

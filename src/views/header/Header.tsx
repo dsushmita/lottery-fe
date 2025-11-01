@@ -14,6 +14,7 @@ import {
   useTheme,
   useMediaQuery,
   Divider,
+  Container,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
@@ -32,6 +33,14 @@ import { MobileDrawer } from "./components/MobileDrawer";
 import { NavItem } from "./components/NavItem";
 import { Logo } from "@/assets/icons";
 import Image from "next/image";
+import { Footer } from "../footer/Footer";
+import { HeroSection } from "../home/HeroSection";
+import { LiveDropPanel } from "../home/LiveDropPanel";
+import { FeaturedBoxes } from "../featuresbox/FeaturedBoxes";
+import Section from "../section/Section";
+import { TopBattles } from "../battle";
+import { Rewards } from "../rewards/Rewards";
+import { Leaderboard } from "../Leaderboard/Leaderboard";
 
 export type HeaderProps = {
   activeTab?: string;
@@ -40,9 +49,9 @@ export type HeaderProps = {
 const VerticalDivider = () => (
   <Divider
     orientation="vertical"
-    flexItem
     sx={{
-      height: "24px",
+      display: { xs: "none", md: "block" },
+      height: "64px",
       bgcolor: "rgba(255, 255, 255, 0.1)",
       width: "1px",
       mx: 1,
@@ -167,26 +176,10 @@ export const Header: React.FC<HeaderProps> = ({
             <BalanceBadge balance={0} onClick={handleBalanceClick} />
             <VerticalDivider />
 
-            {/* Add Funds */}
-            <IconButton
-              onClick={handleAddFunds}
-              sx={{
-                width: { xs: 32, md: 36 },
-                height: { xs: 32, md: 36 },
-                bgcolor: "#3ABEF9",
-                color: "#FFFFFF",
-                "&:hover": { bgcolor: "#2A8EC7" },
-              }}
-              aria-label="Add funds"
-            >
-              <AddIcon fontSize="small" />
-            </IconButton>
-
             {/* Cart - Desktop only */}
             <IconButton
               onClick={handleCartClick}
               sx={{
-                display: { xs: "none", md: "flex" },
                 color: "#8E9AAB",
                 "&:hover": {
                   bgcolor: "rgba(255, 255, 255, 0.05)",
@@ -197,6 +190,7 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <ShoppingCartOutlinedIcon />
             </IconButton>
+            <VerticalDivider />
 
             {/* Notifications */}
             <IconButton
@@ -222,6 +216,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <NotificationsNoneOutlinedIcon />
               </Badge>
             </IconButton>
+            <VerticalDivider />
 
             {/* Chat - Mobile only */}
             <IconButton
@@ -258,7 +253,7 @@ export const Header: React.FC<HeaderProps> = ({
               <Avatar
                 src={
                   user.avatar ||
-                  `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(
+                  `https://api.dicebear.com/7.x/bottts/svg?seed=${encodeURIComponent(
                     user.name ?? "user",
                   )}`
                 }
@@ -298,6 +293,44 @@ export const Header: React.FC<HeaderProps> = ({
         onTabChange={navigateToTab}
         onProfileClick={handleProfileClick}
       />
+
+      {/* Main Content Layout */}
+      <Box sx={{ display: "flex", position: "relative" }}>
+        <Box
+          component="main"
+          sx={{
+            flex: 1,
+            mr: { xs: 0, lg: "300px" },
+            pt: "50px",
+          }}
+        >
+          <Container maxWidth="xl">
+            {/* Hero Section */}
+            <HeroSection />
+
+            {/* Featured Boxes Section */}
+            <Section>
+              <FeaturedBoxes />
+            </Section>
+            <Section>
+              <TopBattles limit={4} showViewAllButton={true} />
+            </Section>
+            <Section>
+              <Rewards />
+            </Section>
+             <Section>
+              <Leaderboard />
+            </Section>
+          </Container>
+        </Box>
+
+        {/* Live Drop Panel - Desktop Only */}
+        <Box sx={{ display: { xs: "none", lg: "block" } }}>
+          <LiveDropPanel />
+        </Box>
+      </Box>
+
+      {/* <Footer /> */}
     </>
   );
 };
